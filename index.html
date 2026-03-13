@@ -297,14 +297,54 @@
     padding: 20px 24px;
   }
 
+  /* FILTROS */
+  .filter-bar {
+    display: flex; gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .filter-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--dark);
+    color: var(--white);
+    border-color: var(--dark);
+  }
+
+  .gallery-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .gallery-card.hidden { display: none; }
+
   .gallery-tag {
     font-size: 10px; font-weight: 600;
     letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 4px;
+    display: inline-block; margin-bottom: 10px;
+  }
+
+  .arriendo-tag {
     color: var(--orange);
     background: var(--orange-light);
     border: 1px solid rgba(216,97,60,0.2);
-    padding: 3px 9px; border-radius: 4px;
-    display: inline-block; margin-bottom: 10px;
+  }
+
+  .venta-tag {
+    color: #1a6b3c;
+    background: rgba(26,107,60,0.08);
+    border: 1px solid rgba(26,107,60,0.2);
   }
 
   .gallery-info h4 {
@@ -515,43 +555,186 @@
   <div class="gallery-inner">
     <span class="section-tag">Propiedades</span>
     <h2 class="section-title">Disponibles ahora</h2>
+
+    <!-- FILTROS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Todas</button>
+      <button class="filter-btn" data-filter="arriendo">Arriendo</button>
+      <button class="filter-btn" data-filter="venta">Venta</button>
+    </div>
+
     <div class="gallery-grid">
-      <div class="gallery-card reveal">
-        <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/03/costa-san-francisco-14.jpg?w=768')"></div>
-        <div class="gallery-info">
-          <span class="gallery-tag">Arriendo</span>
-          <h4>Departamento a estrenar</h4>
-          <p>San Pedro de la Paz · Costa San Francisco</p>
-          <span class="gallery-price">$500.000 / mes</span>
-        </div>
+
+      <!-- ARRIENDOS -->
+      <div class="gallery-card reveal" data-type="arriendo">
+        <a href="https://solucionescolina.home.blog/2026/03/03/arriendo-departamento-estreno-san-pedro-de-la-paz-costa-san-francisco/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/03/5a469b72-1856-4a3f-9955-dc07b0c1cc84.png')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag arriendo-tag">Arriendo</span>
+            <h4>Depto. a estrenar · Costa San Francisco</h4>
+            <p>San Pedro de la Paz</p>
+            <span class="gallery-price">$500.000 / mes</span>
+          </div>
+        </a>
       </div>
-      <div class="gallery-card reveal">
-        <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/03/costa-san-francisco-19.jpg?w=768')"></div>
-        <div class="gallery-info">
-          <span class="gallery-tag">Arriendo</span>
-          <h4>Departamento a estrenar</h4>
-          <p>San Pedro de la Paz · Costa San Francisco</p>
-          <span class="gallery-price">$500.000 / mes</span>
-        </div>
+
+      <div class="gallery-card reveal" data-type="arriendo">
+        <a href="https://solucionescolina.home.blog/2026/02/20/arriendo-departamento-mariposa-centro-concepcion-piso-18/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/a3f11eaf-7bbd-418f-94a8-f2e56e5260ba.png')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag arriendo-tag">Arriendo</span>
+            <h4>Modelo Mariposa · Piso 18 · 65 m²</h4>
+            <p>Centro Concepción</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
       </div>
-      <div class="gallery-card reveal">
-        <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/03/costa-san-francisco-17.jpg?w=768')"></div>
-        <div class="gallery-info">
-          <span class="gallery-tag">Arriendo</span>
-          <h4>Departamento a estrenar</h4>
-          <p>San Pedro de la Paz · Costa San Francisco</p>
-          <span class="gallery-price">$500.000 / mes</span>
-        </div>
+
+      <div class="gallery-card reveal" data-type="arriendo">
+        <a href="https://solucionescolina.home.blog/2026/02/19/arriendo-departamento-primer-piso-mirador-del-sol-talcahuano/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_1919.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag arriendo-tag">Arriendo</span>
+            <h4>Depto. 3D · 77 m² · Primer piso</h4>
+            <p>Brisas del Sol, Talcahuano</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
       </div>
-      <div class="gallery-card reveal">
-        <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/03/costa-san-francisco-13.jpg?w=768')"></div>
-        <div class="gallery-info">
-          <span class="gallery-tag">Arriendo</span>
-          <h4>Departamento a estrenar</h4>
-          <p>San Pedro de la Paz · Costa San Francisco</p>
-          <span class="gallery-price">$500.000 / mes</span>
-        </div>
+
+      <div class="gallery-card reveal" data-type="arriendo">
+        <a href="https://solucionescolina.home.blog/2026/02/19/arriendo-departamento-4-norte-san-pedro-de-la-paz/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/eca86035-8e87-449e-8dfc-a2ef26bf4714.png')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag arriendo-tag">Arriendo</span>
+            <h4>Depto. 2D / 2B · Gastos comunes incluidos</h4>
+            <p>4 Norte, San Pedro de la Paz</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
       </div>
+
+      <div class="gallery-card reveal" data-type="arriendo">
+        <a href="https://solucionescolina.home.blog/2026/02/16/arriendo-departamento-san-pedro-de-la-paz-costa-san-francisco/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/f37e4325-b5e4-4580-a2f5-c7556dd1b9a6.png')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag arriendo-tag">Arriendo</span>
+            <h4>Depto. Costa San Francisco · Biotren</h4>
+            <p>San Pedro de la Paz</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="arriendo">
+        <a href="https://solucionescolina.home.blog/2026/02/09/local-comercial-arriendo-centro-coronel/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_0021.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag arriendo-tag">Arriendo</span>
+            <h4>Local Comercial</h4>
+            <p>Centro Coronel</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="arriendo">
+        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-arriendo-portal-del-bosque-lomas-coloradas/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/36b42255-bde3-4bf1-a60b-1d054a365e4d.png')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag arriendo-tag">Arriendo</span>
+            <h4>Depto. Portal del Bosque</h4>
+            <p>Lomas Coloradas, San Pedro de la Paz</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- VENTAS -->
+      <div class="gallery-card reveal" data-type="venta">
+        <a href="https://solucionescolina.home.blog/2026/02/22/departamento-en-venta-hualpen-conectividad-costanera/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/ec55f21b-4111-4732-99da-8e6d293e7712.png')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag venta-tag">Venta</span>
+            <h4>Depto. 2-3D · Áreas verdes · Costanera del Sol</h4>
+            <p>Hualpén</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="venta">
+        <a href="https://solucionescolina.home.blog/2026/02/16/casa-en-venta-ciudad-del-sol-puente-alto-oferta/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/77be70a3-44fc-4eb6-8295-d0a9f4feb983.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag venta-tag">Venta</span>
+            <h4>Casa 4D / 3B · Quincho · Seguridad 24/7</h4>
+            <p>Ciudad del Sol, Puente Alto</p>
+            <span class="gallery-price">$162.000.000</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="venta">
+        <a href="https://solucionescolina.home.blog/2026/02/10/departamento-estudio-macul-venta-inversion/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/estudio-macul-8.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag venta-tag">Venta</span>
+            <h4>Estudio 31 m² · Piso 6 · Inversión</h4>
+            <p>Macul</p>
+            <span class="gallery-price">1.950 UF</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="venta">
+        <a href="https://solucionescolina.home.blog/2026/02/09/casa-inversion-spring-hill-san-pedro-de-la-paz/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/casa-sprinhill-enrique-soro-14.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag venta-tag">Venta</span>
+            <h4>Casa 3D · Amplio terreno · Spring Hill</h4>
+            <p>San Pedro de la Paz</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="venta">
+        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-3d-condominio-paseo-del-mar-coronel/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_0281.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag venta-tag">Venta</span>
+            <h4>Depto. 3D / 2B · Piso 4 · Paseo del Mar</h4>
+            <p>Coronel</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="venta">
+        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-venta-altos-de-coronel-3d-1b/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_1993.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag venta-tag">Venta</span>
+            <h4>Depto. 3D / 1B · Segundo piso</h4>
+            <p>Altos de Coronel</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gallery-card reveal" data-type="venta">
+        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-mirador-del-sol-talcahuano/" target="_blank">
+          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_1917.jpg')"></div>
+          <div class="gallery-info">
+            <span class="gallery-tag venta-tag">Venta</span>
+            <h4>Depto. 3D / 2B · Balcón · Mirador del Sol</h4>
+            <p>Talcahuano</p>
+            <span class="gallery-price">Consultar precio</span>
+          </div>
+        </a>
+      </div>
+
     </div>
   </div>
 </div>
@@ -601,6 +784,18 @@
     });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
+
+  // Filtros
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.gallery-card').forEach(card => {
+        card.classList.toggle('hidden', filter !== 'all' && card.dataset.type !== filter);
+      });
+    });
+  });
 
   window.addEventListener('scroll', () => {
     document.querySelector('nav').style.boxShadow =
