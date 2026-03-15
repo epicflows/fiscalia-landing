@@ -23,5 +23,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout main
-          git merge --ff-only ${{ github.ref_name }}
+          git merge -X theirs ${{ github.ref_name }} --no-edit
           git push origin main
