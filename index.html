@@ -80,6 +80,13 @@ main{max-width:960px;margin:0 auto;padding:40px 5% 80px}
 .bo-tag{display:inline-block;margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--paper);color:var(--g4);padding:2px 8px;border:1px solid var(--bl2)}
 
 @media(max-width:600px){.brand-grid{grid-template-columns:1fr}.item-meta{display:none}}
+
+/* Floating save button */
+.fab-save{position:fixed;bottom:28px;right:24px;background:var(--navy);color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 16px rgba(13,27,75,.35);display:flex;align-items:center;gap:8px;transition:background .2s,transform .1s;z-index:999}
+.fab-save:hover{background:var(--red)}
+.fab-save:active{transform:scale(.96)}
+.fab-save.saved{background:var(--green)}
+.fab-icon{font-size:1rem}
 </style>
 </head>
 <body>
@@ -420,6 +427,10 @@ main{max-width:960px;margin:0 auto;padding:40px 5% 80px}
 
 </main>
 
+<button class="fab-save" id="fabSave" onclick="manualSave()">
+  <span class="fab-icon">💾</span> Guardar
+</button>
+
 <script>
 function toggleItem(el) {
   if(event.target.classList.contains('notes-toggle') || event.target.classList.contains('notes-input') || event.target.closest('.brand-option')) return;
@@ -453,6 +464,17 @@ function updateProgress() {
   document.getElementById('sumDone').textContent = done.length;
   document.getElementById('sumPending').textContent = items.length - done.length;
   document.getElementById('sumUrgent').textContent = urgent.length;
+}
+
+function manualSave() {
+  saveState();
+  const btn = document.getElementById('fabSave');
+  btn.classList.add('saved');
+  btn.innerHTML = '<span class="fab-icon">✓</span> Guardado';
+  setTimeout(() => {
+    btn.classList.remove('saved');
+    btn.innerHTML = '<span class="fab-icon">💾</span> Guardar';
+  }, 2000);
 }
 
 function saveState() {
