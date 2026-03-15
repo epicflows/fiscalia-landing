@@ -1,806 +1,493 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Soluciones Colina — Bienes Raíces Región del Biobío</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DNX · Checklist de Lanzamiento</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --orange: #d8613c;
-    --orange-light: rgba(216,97,60,0.1);
-    --beige: #cfcabe;
-    --tan: #c2a990;
-    --dark: #111111;
-    --muted: #636363;
-    --light: #A4A4A4;
-    --bg: #f9f9f9;
-    --white: #ffffff;
-    --border: #e8e4df;
-  }
+:root{--ink:#0A0E1A;--navy:#0D1B4B;--red:#C0182C;--gold:#D4A017;--green:#1a6b3c;--paper:#FAFAF7;--g1:#1C2035;--g4:#8892A8;--bl2:#DDE2EE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+header{background:var(--ink);padding:20px 5%;border-bottom:3px solid var(--red);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.h-brand{display:flex;align-items:center;gap:10px}
+.h-dnx{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;background:var(--red);color:#fff;padding:2px 10px;clip-path:polygon(0 0,100% 0,96% 100%,0 100%)}
+.h-title{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--g4)}
+.h-progress{display:flex;align-items:center;gap:12px}
+.progress-bar{width:200px;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;transition:width .4s ease}
+.progress-label{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:1px;color:#fff}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+main{max-width:960px;margin:0 auto;padding:40px 5% 80px}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--dark);
-    overflow-x: hidden;
-  }
+.section{margin-bottom:40px}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--bl2)}
+.section-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);line-height:1;flex-shrink:0}
+.section-info{}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--navy)}
+.section-sub{font-size:0.82rem;color:var(--g4);margin-top:2px}
+.section-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.badge-urgent{background:rgba(192,24,44,.1);color:var(--red);border:1px solid rgba(192,24,44,.3)}
+.badge-pending{background:rgba(212,160,23,.1);color:var(--gold);border:1px solid rgba(212,160,23,.3)}
+.badge-done{background:rgba(26,107,60,.1);color:var(--green);border:1px solid rgba(26,107,60,.3)}
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 14px 60px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(249,249,249,0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    transition: box-shadow 0.3s;
-  }
+.items{display:flex;flex-direction:column;gap:8px}
+.item{background:#fff;border:1.5px solid var(--bl2);padding:16px 18px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:border-color .2s,box-shadow .2s;user-select:none;border-left:4px solid transparent}
+.item:hover{box-shadow:0 2px 12px rgba(13,27,75,.08)}
+.item.done{border-left-color:var(--green);background:#f6fbf8}
+.item.urgent{border-left-color:var(--red)}
+.item.info{border-left-color:var(--navy)}
 
-  .nav-logo img {
-    height: 44px;
-    width: auto;
-    object-fit: contain;
-  }
+.checkbox{width:22px;height:22px;border:2px solid var(--bl2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.item.done .checkbox{background:var(--green);border-color:var(--green)}
+.checkmark{color:#fff;font-size:0.85rem;opacity:0;transition:opacity .2s}
+.item.done .checkmark{opacity:1}
 
-  .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--dark); }
+.item-body{flex:1}
+.item-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0.5px;color:var(--ink);margin-bottom:3px}
+.item.done .item-title{text-decoration:line-through;color:var(--g4)}
+.item-desc{font-size:0.82rem;color:var(--g4);line-height:1.55;font-weight:300}
+.item-tag{display:inline-block;margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px}
+.tag-action{background:rgba(192,24,44,.08);color:var(--red);border:1px solid rgba(192,24,44,.2)}
+.tag-data{background:rgba(13,27,75,.06);color:var(--navy);border:1px solid rgba(13,27,75,.15)}
+.tag-design{background:rgba(212,160,23,.08);color:var(--gold);border:1px solid rgba(212,160,23,.2)}
+.tag-tech{background:rgba(26,107,60,.08);color:var(--green);border:1px solid rgba(26,107,60,.2)}
 
-  .nav-cta {
-    background: var(--dark) !important;
-    color: var(--white) !important;
-    padding: 10px 22px;
-    border-radius: 6px;
-    font-weight: 600 !important;
-    transition: background 0.2s !important;
-  }
-  .nav-cta:hover { background: var(--orange) !important; }
+.item-meta{text-align:right;flex-shrink:0;min-width:80px}
+.item-who{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--g4)}
+.item-phase{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--navy);line-height:1;margin-top:2px}
 
-  /* HERO */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 140px 60px 80px;
-    text-align: center;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    overflow: hidden;
-  }
+/* Notes area */
+.notes-area{margin-top:10px}
+.notes-input{width:100%;background:var(--paper);border:1px solid var(--bl2);padding:8px 12px;font-family:'Barlow',sans-serif;font-size:0.8rem;color:var(--ink);resize:vertical;min-height:48px;outline:none;transition:border-color .2s;display:none}
+.notes-input:focus{border-color:var(--navy)}
+.notes-toggle{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--g4);cursor:pointer;margin-top:6px;display:inline-block;transition:color .2s}
+.notes-toggle:hover{color:var(--navy)}
 
-  .hero-bg-img {
-    position: absolute; inset: 0;
-    background-image: url('https://solucionescolina.home.blog/wp-content/uploads/2026/03/costa-san-francisco-14.jpg?w=768');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.07;
-    pointer-events: none;
-  }
+/* Summary */
+.summary{background:var(--navy);padding:28px 32px;margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px}
+.sum-item{text-align:center}
+.sum-n{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--gold);line-height:1}
+.sum-l{font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:4px}
 
-  .hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 800px 500px at 50% 60%, rgba(216,97,60,0.05), transparent);
-    pointer-events: none;
-  }
+/* Brand section */
+.brand-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.brand-option{background:#fff;border:1.5px solid var(--bl2);padding:16px;cursor:pointer;transition:all .2s;position:relative}
+.brand-option:hover{border-color:var(--navy)}
+.brand-option.selected{border-color:var(--red);background:rgba(192,24,44,.03)}
+.brand-option.selected::after{content:'✓ Seleccionado';position:absolute;top:8px;right:10px;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red)}
+.bo-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:4px}
+.bo-sub{font-size:0.78rem;color:var(--g4);line-height:1.4}
+.bo-tag{display:inline-block;margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--paper);color:var(--g4);padding:2px 8px;border:1px solid var(--bl2)}
 
-  .badge-top {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--orange-light);
-    border: 1px solid rgba(216,97,60,0.25);
-    color: var(--orange);
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 7px 18px; border-radius: 100px;
-    margin-bottom: 36px;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  .hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(42px, 6vw, 76px);
-    line-height: 1.05;
-    letter-spacing: -2px;
-    color: var(--dark);
-    margin-bottom: 20px;
-    animation: fadeUp 0.7s 0.1s ease both;
-  }
-
-  .hero h1 em {
-    color: var(--orange);
-    font-style: italic;
-  }
-
-  .hero-sub {
-    font-size: clamp(15px, 1.8vw, 19px);
-    color: var(--muted);
-    font-weight: 300;
-    max-width: 540px;
-    margin: 0 auto 56px;
-    line-height: 1.7;
-    animation: fadeUp 0.7s 0.2s ease both;
-  }
-
-  /* SERVICIOS */
-  .services {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    max-width: 960px;
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    animation: fadeUp 0.7s 0.3s ease both;
-    position: relative; z-index: 1;
-  }
-
-  .service-item {
-    background: var(--white);
-    padding: 36px 28px;
-    text-align: center;
-    border-right: 1px solid var(--border);
-    transition: background 0.2s;
-  }
-  .service-item:last-child { border-right: none; }
-  .service-item:hover { background: var(--bg); }
-
-  .service-icon { font-size: 26px; margin-bottom: 14px; display: block; }
-
-  .service-item h3 {
-    font-size: 15px; font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--dark);
-  }
-
-  .service-item p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  /* DIVIDER */
-  .divider {
-    width: 100%; height: 1px;
-    background: var(--border);
-  }
-
-  /* MERCADOS */
-  .markets {
-    padding: 100px 60px;
-    max-width: 1100px; margin: 0 auto;
-  }
-
-  .section-tag {
-    font-size: 11px; font-weight: 600;
-    color: var(--orange);
-    letter-spacing: 2px; text-transform: uppercase;
-    margin-bottom: 12px; display: block;
-  }
-
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(28px, 3.5vw, 44px);
-    line-height: 1.1;
-    letter-spacing: -1px;
-    color: var(--dark);
-    margin-bottom: 48px;
-  }
-
-  .markets-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  .market-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 36px;
-    transition: all 0.3s;
-    position: relative; overflow: hidden;
-  }
-
-  .market-card::after {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--orange);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.3s;
-  }
-  .market-card:hover::after { transform: scaleX(1); }
-  .market-card:hover {
-    border-color: rgba(216,97,60,0.3);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
-    transform: translateY(-4px);
-  }
-
-  .market-flag { font-size: 28px; margin-bottom: 16px; display: block; }
-
-  .market-card h3 {
-    font-size: 18px; font-weight: 600;
-    margin-bottom: 10px;
-    color: var(--dark);
-  }
-
-  .market-card p {
-    font-size: 14px; color: var(--muted);
-    line-height: 1.7;
-  }
-
-  .market-tag {
-    display: inline-block;
-    margin-top: 16px;
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 1px;
-    background: var(--orange-light);
-    border: 1px solid rgba(216,97,60,0.2);
-    color: var(--orange);
-    padding: 4px 10px; border-radius: 4px;
-    text-transform: uppercase;
-  }
-
-  /* GALERÍA */
-  .gallery-section {
-    background: var(--bg);
-    padding: 100px 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .gallery-inner {
-    max-width: 1100px; margin: 0 auto;
-    padding: 0 60px;
-  }
-
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .gallery-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.3s;
-  }
-
-  .gallery-card:hover {
-    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-    transform: translateY(-4px);
-  }
-
-  .gallery-img {
-    width: 100%; height: 220px;
-    background-size: cover;
-    background-position: center;
-    background-color: var(--border);
-  }
-
-  .gallery-info {
-    padding: 20px 24px;
-  }
-
-  /* FILTROS */
-  .filter-bar {
-    display: flex; gap: 8px;
-    margin-bottom: 32px;
-  }
-
-  .filter-btn {
-    padding: 8px 20px;
-    border-radius: 6px;
-    font-size: 13px; font-weight: 500;
-    border: 1px solid var(--border);
-    background: var(--white);
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--dark);
-    color: var(--white);
-    border-color: var(--dark);
-  }
-
-  .gallery-card a {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-
-  .gallery-card.hidden { display: none; }
-
-  .gallery-tag {
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 1px; text-transform: uppercase;
-    padding: 3px 9px; border-radius: 4px;
-    display: inline-block; margin-bottom: 10px;
-  }
-
-  .arriendo-tag {
-    color: var(--orange);
-    background: var(--orange-light);
-    border: 1px solid rgba(216,97,60,0.2);
-  }
-
-  .venta-tag {
-    color: #1a6b3c;
-    background: rgba(26,107,60,0.08);
-    border: 1px solid rgba(26,107,60,0.2);
-  }
-
-  .gallery-info h4 {
-    font-size: 15px; font-weight: 600;
-    color: var(--dark); margin-bottom: 4px;
-  }
-
-  .gallery-info p {
-    font-size: 13px; color: var(--muted);
-    margin-bottom: 12px;
-  }
-
-  .gallery-price {
-    font-size: 16px; font-weight: 600;
-    color: var(--orange);
-  }
-
-  /* LEMA */
-  .lema {
-    background: var(--dark);
-    padding: 90px 60px;
-    text-align: center;
-  }
-
-  .lema blockquote {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(22px, 3vw, 38px);
-    font-style: italic;
-    color: rgba(255,255,255,0.85);
-    line-height: 1.4;
-    letter-spacing: -0.5px;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  .lema blockquote em { color: var(--orange); font-style: normal; }
-
-  /* CONTACTO */
-  .contact {
-    padding: 100px 60px;
-    max-width: 1100px; margin: 0 auto;
-    text-align: center;
-  }
-
-  .contact-grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 40px;
-  }
-
-  .contact-btn {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 14px 26px;
-    border-radius: 8px;
-    font-size: 14px; font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .contact-btn.primary {
-    background: var(--orange);
-    color: var(--white);
-    font-weight: 600;
-  }
-  .contact-btn.primary:hover {
-    background: #c0512e;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(216,97,60,0.25);
-  }
-
-  .contact-btn.outline {
-    border: 1px solid var(--border);
-    color: var(--muted);
-    background: var(--white);
-  }
-  .contact-btn.outline:hover {
-    border-color: rgba(216,97,60,0.4);
-    color: var(--dark);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-  }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 60px;
-    display: flex; align-items: center; justify-content: space-between;
-    color: var(--light);
-    font-size: 12px;
-    background: var(--white);
-  }
-
-  .footer-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 15px;
-    color: var(--muted);
-  }
-  .footer-logo span { color: var(--orange); }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .reveal {
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero { padding: 120px 24px 60px; }
-    .services { grid-template-columns: 1fr; }
-    .service-item { border-right: none; border-bottom: 1px solid var(--border); }
-    .service-item:last-child { border-bottom: none; }
-    .markets { padding: 60px 24px; }
-    .markets-grid { grid-template-columns: 1fr; }
-    .gallery-grid { grid-template-columns: 1fr; }
-    .gallery-inner { padding: 0 24px; }
-    .contact { padding: 60px 24px; }
-    .lema { padding: 60px 24px; }
-    footer { flex-direction: column; gap: 10px; text-align: center; padding: 24px; }
-  }
+@media(max-width:600px){.brand-grid{grid-template-columns:1fr}.item-meta{display:none}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">
-    <img src="https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_3005.png" alt="Soluciones Colina" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-    <span style="display:none; font-family:'DM Serif Display',serif; font-size:20px; color:#111">Soluciones<span style="color:#d8613c">Colina</span></span>
+<header>
+  <div class="h-brand">
+    <span class="h-dnx">DNX</span>
+    <span class="h-title">Diamond Nexus · Checklist de Lanzamiento</span>
   </div>
-  <ul class="nav-links">
-    <li><a href="#servicios">Servicios</a></li>
-    <li><a href="#mercados">Mercados</a></li>
-    <li><a href="#contacto" class="nav-cta">Contactar</a></li>
-  </ul>
-</nav>
+  <div class="h-progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-label" id="progressLabel">0%</span>
+  </div>
+</header>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-bg-img"></div>
-  <div class="badge-top">
-    Bienes Raíces · Chile · Internacional
+<main>
+
+<!-- SECCIÓN 0 — NOMBRE Y MARCA -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">00</div>
+    <div class="section-info">
+      <div class="section-title">Identidad de Marca</div>
+      <div class="section-sub">Decisiones fundacionales — sin esto nada más puede avanzar correctamente</div>
+    </div>
+    <span class="section-badge badge-urgent">🔴 Urgente</span>
   </div>
 
-  <h1>Valorizamos propiedades<br><em>con criterio</em></h1>
-
-  <p class="hero-sub">
-    Compra, venta y arriendo de propiedades en la Región del Biobío. Proyectos en Florida, EE.UU. y activos de alta gama en Venezuela.
-  </p>
-
-  <div class="services" id="servicios">
-    <div class="service-item">
-      <span class="service-icon">🏠</span>
-      <h3>Mercado Secundario</h3>
-      <p>Compra y venta de propiedades con valorización profesional y asesoría integral.</p>
-    </div>
-    <div class="service-item">
-      <span class="service-icon">🔑</span>
-      <h3>Arriendos</h3>
-      <p>Gestión completa de arriendos residenciales en el Gran Concepción.</p>
-    </div>
-    <div class="service-item">
-      <span class="service-icon">🏗️</span>
-      <h3>Proyectos Nuevos</h3>
-      <p>Comercialización de proyectos inmobiliarios en desarrollo y propiedades a estrenar.</p>
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- MERCADOS -->
-<div class="markets" id="mercados">
-  <span class="section-tag">Presencia Internacional</span>
-  <h2 class="section-title">Operamos donde<br>están las oportunidades</h2>
-
-  <div class="markets-grid">
-    <div class="market-card reveal">
-      <span class="market-flag">🇨🇱</span>
-      <h3>Región del Biobío, Chile</h3>
-      <p>Mercado local con foco en Concepción, San Pedro de la Paz, Talcahuano y Hualpén. Arriendo, venta y proyectos residenciales.</p>
-      <span class="market-tag">Mercado Principal</span>
-    </div>
-    <div class="market-card reveal">
-      <span class="market-flag">🇺🇸</span>
-      <h3>Florida, Estados Unidos</h3>
-      <p>Proyectos inmobiliarios en el mercado norteamericano. Inversión y desarrollo en uno de los estados de mayor crecimiento.</p>
-      <span class="market-tag">Internacional</span>
-    </div>
-    <div class="market-card reveal" style="grid-column: 1 / -1;">
-      <span class="market-flag">🇻🇪</span>
-      <h3>Venezuela — Alta Gama</h3>
-      <p>Activos de alto valor: hoteles, empresas y grandes extensiones de terreno con potencial turístico. Segmento premium para inversores institucionales y family offices.</p>
-      <span class="market-tag">Alta Gama</span>
+  <div style="margin-bottom:16px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g4);margin-bottom:10px">Opciones de Nombre — Selecciona la definitiva</div>
+    <div class="brand-grid" id="nameOptions">
+      <div class="brand-option" onclick="selectBrand('name',this,'DNX · Diamond Nexus')">
+        <div class="bo-name" style="color:var(--red)">DNX</div>
+        <div class="bo-sub"><strong>Diamond Nexus</strong><br/>Nombre actual. Sonido global, sigla poderosa. El punto de conexión del diamante.</div>
+        <span class="bo-tag">Recomendado</span>
+      </div>
+      <div class="brand-option" onclick="selectBrand('name',this,'BTP · Baseball Talent Platform')">
+        <div class="bo-name">BTP</div>
+        <div class="bo-sub"><strong>Baseball Talent Platform</strong><br/>Nombre original del deck 2018. Descriptivo pero genérico.</div>
+        <span class="bo-tag">Original 2018</span>
+      </div>
+      <div class="brand-option" onclick="selectBrand('name',this,'LATAM Scout · Global Baseball Intelligence')">
+        <div class="bo-name">LATAM SCOUT</div>
+        <div class="bo-sub"><strong>Global Baseball Intelligence</strong><br/>Enfatiza el origen geográfico y el proceso de scouting.</div>
+        <span class="bo-tag">Alternativa</span>
+      </div>
+      <div class="brand-option" onclick="selectBrand('name',this,'Otro nombre — por definir')">
+        <div class="bo-name" style="color:var(--g4)">OTRO</div>
+        <div class="bo-sub">El equipo tiene otro nombre en mente. Definir en reunión con Henry.</div>
+        <span class="bo-tag">Por definir</span>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- GALERÍA -->
-<div class="gallery-section">
-  <div class="gallery-inner">
-    <span class="section-tag">Propiedades</span>
-    <h2 class="section-title">Disponibles ahora</h2>
-
-    <!-- FILTROS -->
-    <div class="filter-bar">
-      <button class="filter-btn active" data-filter="all">Todas</button>
-      <button class="filter-btn" data-filter="arriendo">Arriendo</button>
-      <button class="filter-btn" data-filter="venta">Venta</button>
+  <div class="items">
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Decidir nombre final del proyecto</div>
+        <div class="item-desc">El nombre define el dominio, el logo, los colores y el tono. Es la primera decisión que desbloquea todo lo demás. Propuesta: mantener DNX / Diamond Nexus — tiene fuerza visual, es único y funciona en inglés y español.</div>
+        <span class="item-tag tag-action">Decisión del equipo fundador</span>
+        <div class="notes-area">
+          <span class="notes-toggle" onclick="toggleNote(event,this)">+ Agregar nota</span>
+          <textarea class="notes-input" placeholder="Nota sobre el nombre..."></textarea>
+        </div>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
     </div>
 
-    <div class="gallery-grid">
-
-      <!-- ARRIENDOS -->
-      <div class="gallery-card reveal" data-type="arriendo">
-        <a href="https://solucionescolina.home.blog/2026/03/03/arriendo-departamento-estreno-san-pedro-de-la-paz-costa-san-francisco/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/03/5a469b72-1856-4a3f-9955-dc07b0c1cc84.png')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag arriendo-tag">Arriendo</span>
-            <h4>Depto. a estrenar · Costa San Francisco</h4>
-            <p>San Pedro de la Paz</p>
-            <span class="gallery-price">$500.000 / mes</span>
-          </div>
-        </a>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Comprar dominio — dnxbaseball.com o diamondnexus.com</div>
+        <div class="item-desc">Costo: $12–15 USD/año en GoDaddy, Namecheap o Google Domains. Debe hacerse antes de mostrar el demo a Henry o a Roger. Sin dominio el proyecto no existe formalmente. Verificar disponibilidad: dnxbaseball.com · dnxglobal.com · diamondnexus.com</div>
+        <span class="item-tag tag-action">Acción inmediata — menos de $15</span>
       </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-      <div class="gallery-card reveal" data-type="arriendo">
-        <a href="https://solucionescolina.home.blog/2026/02/20/arriendo-departamento-mariposa-centro-concepcion-piso-18/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/a3f11eaf-7bbd-418f-94a8-f2e56e5260ba.png')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag arriendo-tag">Arriendo</span>
-            <h4>Modelo Mariposa · Piso 18 · 65 m²</h4>
-            <p>Centro Concepción</p>
-            <span class="gallery-price">Consultar precio</span>
-          </div>
-        </a>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Definir paleta de colores oficial</div>
+        <div class="item-desc">Propuesta actual basada en el logo existente: Azul navy #0D1B4B (dominante 60%) · Rojo #C0182C (acento 30%) · Blanco #FFFFFF (base 10%). Esta combinación es consistente con las ligas MLB y comunica autoridad deportiva profesional. ¿El equipo la aprueba o quiere explorar alternativas?</div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <div style="width:36px;height:36px;background:#0D1B4B;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="width:36px;height:36px;background:#C0182C;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="width:36px;height:36px;background:#FFFFFF;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="width:36px;height:36px;background:#D4A017;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="margin-left:8px;font-size:0.75rem;color:var(--g4);line-height:1.4;display:flex;align-items:center">Navy · Rojo · Blanco · Oro (acento stats)</div>
+        </div>
+        <span class="item-tag tag-design">Diseño</span>
       </div>
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-      <div class="gallery-card reveal" data-type="arriendo">
-        <a href="https://solucionescolina.home.blog/2026/02/19/arriendo-departamento-primer-piso-mirador-del-sol-talcahuano/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_1919.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag arriendo-tag">Arriendo</span>
-            <h4>Depto. 3D · 70 m² · Primer piso</h4>
-            <p>Brisas del Sol, Talcahuano</p>
-            <span class="gallery-price">$670.000 / mes</span>
-          </div>
-        </a>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar o actualizar el logo DNX</div>
+        <div class="item-desc">El logo actual (azul navy + rojo, estilo liga deportiva con swoosh) funciona bien para el demo. Si el nombre cambia, el logo debe cambiar. Si DNX se mantiene, el logo actual es sólido y no necesita rediseño urgente — puede refinarse en Fase 1 con un diseñador profesional.</div>
+        <span class="item-tag tag-design">Diseño</span>
       </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-      <div class="gallery-card reveal" data-type="arriendo">
-        <a href="https://solucionescolina.home.blog/2026/02/19/arriendo-departamento-4-norte-san-pedro-de-la-paz/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/eca86035-8e87-449e-8dfc-a2ef26bf4714.png')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag arriendo-tag">Arriendo</span>
-            <h4>Depto. 2D / 2B · Gastos comunes incluidos</h4>
-            <p>4 Norte, San Pedro de la Paz</p>
-            <span class="gallery-price">$420.000 / mes</span>
-          </div>
-        </a>
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Definir fuente tipográfica oficial</div>
+        <div class="item-desc">Propuesta actual del demo: Bebas Neue (títulos — agresiva, deportiva, gratuita) + Barlow Condensed (etiquetas y datos) + Barlow (cuerpo de texto). Alternativa más premium: Montserrat + Oswald. Las tres opciones son gratuitas en Google Fonts y funcionan en web, app y documentos impresos.</div>
+        <span class="item-tag tag-design">Diseño</span>
       </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-      <div class="gallery-card reveal" data-type="arriendo">
-        <a href="https://solucionescolina.home.blog/2026/02/16/arriendo-departamento-san-pedro-de-la-paz-costa-san-francisco/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/f37e4325-b5e4-4580-a2f5-c7556dd1b9a6.png')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag arriendo-tag">Arriendo</span>
-            <h4>Depto. Costa San Francisco · Biotren</h4>
-            <p>San Pedro de la Paz</p>
-            <span class="gallery-price">$450.000 / mes</span>
-          </div>
-        </a>
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Definir tono de comunicación de la marca</div>
+        <div class="item-desc">Propuesta: Directo · Serio · Con autoridad · Sin exceso de emoción. DNX habla como un scout veterano, no como una startup motivacional. Ejemplo tono correcto: "El próximo firmado ya existe. Nosotros lo encontramos." Ejemplo tono incorrecto: "¡Descubre el talento del mañana hoy!" ¿El equipo está de acuerdo con este enfoque?</div>
+        <span class="item-tag tag-design">Tono de marca</span>
       </div>
-
-      <div class="gallery-card reveal" data-type="arriendo">
-        <a href="https://solucionescolina.home.blog/2026/02/09/local-comercial-arriendo-centro-coronel/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_0021.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag arriendo-tag">Arriendo</span>
-            <h4>Local Comercial · 300 m²</h4>
-            <p>Centro Coronel</p>
-            <span class="gallery-price">$3.500.000 / mes</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="gallery-card reveal" data-type="arriendo">
-        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-arriendo-portal-del-bosque-lomas-coloradas/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/36b42255-bde3-4bf1-a60b-1d054a365e4d.png')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag arriendo-tag">Arriendo</span>
-            <h4>Depto. Portal del Bosque · 60 m²</h4>
-            <p>Lomas Coloradas, San Pedro de la Paz</p>
-            <span class="gallery-price">$400.000 / mes</span>
-          </div>
-        </a>
-      </div>
-
-      <!-- VENTAS -->
-      <div class="gallery-card reveal" data-type="venta">
-        <a href="https://solucionescolina.home.blog/2026/02/22/departamento-en-venta-hualpen-conectividad-costanera/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/ec55f21b-4111-4732-99da-8e6d293e7712.png')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag venta-tag">Venta</span>
-            <h4>Depto. 2-3D · Áreas verdes · Costanera del Sol</h4>
-            <p>Hualpén</p>
-            <span class="gallery-price">desde UF 2.698</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="gallery-card reveal" data-type="venta">
-        <a href="https://solucionescolina.home.blog/2026/02/16/casa-en-venta-ciudad-del-sol-puente-alto-oferta/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/77be70a3-44fc-4eb6-8295-d0a9f4feb983.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag venta-tag">Venta</span>
-            <h4>Casa 4D / 3B · Quincho · Seguridad 24/7</h4>
-            <p>Ciudad del Sol, Puente Alto</p>
-            <span class="gallery-price">$162.000.000</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="gallery-card reveal" data-type="venta">
-        <a href="https://solucionescolina.home.blog/2026/02/10/departamento-estudio-macul-venta-inversion/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/estudio-macul-8.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag venta-tag">Venta</span>
-            <h4>Estudio 31 m² · Piso 6 · Inversión</h4>
-            <p>Macul</p>
-            <span class="gallery-price">1.950 UF</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="gallery-card reveal" data-type="venta">
-        <a href="https://solucionescolina.home.blog/2026/02/09/casa-inversion-spring-hill-san-pedro-de-la-paz/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/casa-sprinhill-enrique-soro-14.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag venta-tag">Venta</span>
-            <h4>Casa 3D · 100 m² · Spring Hill</h4>
-            <p>San Pedro de la Paz</p>
-            <span class="gallery-price">$125.000.000</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="gallery-card reveal" data-type="venta">
-        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-3d-condominio-paseo-del-mar-coronel/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_0281.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag venta-tag">Venta</span>
-            <h4>Depto. 3D / 2B · Piso 4 · Paseo del Mar</h4>
-            <p>Coronel</p>
-            <span class="gallery-price">Consultar precio</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="gallery-card reveal" data-type="venta">
-        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-venta-altos-de-coronel-3d-1b/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_1993.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag venta-tag">Venta</span>
-            <h4>Depto. 3D / 1B · Segundo piso</h4>
-            <p>Altos de Coronel</p>
-            <span class="gallery-price">$41.900.000</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="gallery-card reveal" data-type="venta">
-        <a href="https://solucionescolina.home.blog/2026/02/09/departamento-mirador-del-sol-talcahuano/" target="_blank">
-          <div class="gallery-img" style="background-image:url('https://solucionescolina.home.blog/wp-content/uploads/2026/02/img_1917.jpg')"></div>
-          <div class="gallery-info">
-            <span class="gallery-tag venta-tag">Venta</span>
-            <h4>Depto. 3D / 2B · Balcón · Mirador del Sol</h4>
-            <p>Talcahuano</p>
-            <span class="gallery-price">Consultar precio</span>
-          </div>
-        </a>
-      </div>
-
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
     </div>
   </div>
 </div>
 
-<div class="divider"></div>
+<!-- SECCIÓN 1 — DATA REAL -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-info">
+      <div class="section-title">Data Real para el Demo</div>
+      <div class="section-sub">Lo que convierte el demo de ficticio a real — viene de Vilma y Henry</div>
+    </div>
+    <span class="section-badge badge-urgent">🔴 Urgente</span>
+  </div>
+  <div class="items">
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Vilma envía el Excel de jugadores de la escuela</div>
+        <div class="item-desc">Lista con 10–25 jugadores: nombre completo, posición, edad, peso, altura y estadísticas disponibles. Con eso poblamos el directorio DNX con perfiles 100% reales en menos de una tarde. Formato aceptado: Excel, Google Sheets, o incluso WhatsApp en tabla.</div>
+        <span class="item-tag tag-data">Data · Venezuela</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Vilma</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-<!-- LEMA -->
-<div class="lema">
-  <blockquote>"Valorizamos propiedades con <em>criterio inmobiliario</em>"</blockquote>
-</div>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Vilma sube 2–3 videos de entrenamiento por jugador</div>
+        <div class="item-desc">No necesitan ser producción profesional — los videos de celular que ya existen son suficientes para el demo. Subirlos a Google Drive o YouTube (no listado). Eso hace que cada perfil del demo tenga video real, no un placeholder.</div>
+        <span class="item-tag tag-data">Video · Venezuela</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Vilma</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-<!-- CONTACTO -->
-<div class="contact" id="contacto">
-  <span class="section-tag">Contacto</span>
-  <h2 class="section-title reveal">¿Tienes una propiedad<br>o buscas invertir?</h2>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Conseguir al menos 1 caso de éxito documentado</div>
+        <div class="item-desc">Un jugador formado en la escuela que haya firmado con una organización MLB — nombre, equipo, año. Es la prueba de concepto más poderosa del demo. Henry confirmó que hay varios firmados. Necesitamos al menos uno que podamos mencionar con datos reales.</div>
+        <span class="item-tag tag-data">Caso de éxito</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-  <div class="contact-grid">
-    <a href="https://wa.me/message/RZUO47JAFV5CJ1" target="_blank" class="contact-btn primary reveal">
-      💬 WhatsApp
-    </a>
-    <a href="mailto:info@solucionescolina.com" class="contact-btn outline reveal">
-      ✉️ info@solucionescolina.com
-    </a>
-    <a href="tel:+56968218154" class="contact-btn outline reveal">
-      📞 +56 9 6821 8154
-    </a>
-    <a href="https://instagram.com/solucionescolina" target="_blank" class="contact-btn outline reveal">
-      📸 @solucionescolina
-    </a>
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar nombre y ciudad de la escuela formativa de la Fundación</div>
+        <div class="item-desc">Para que aparezca como "Academia Certificada DNX #1" en el demo con el nombre real. Actualmente en el demo aparece como "DNX Academy VEN" — placeholder. ¿Cuál es el nombre oficial de la escuela/academia de la Fundación Roger Cedeño en Venezuela?</div>
+        <span class="item-tag tag-data">Data básica</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry / Vilma</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar datos de contacto reales para el demo</div>
+        <div class="item-desc">WhatsApp del proyecto · Correo electrónico · Instagram o red social. Actualmente el demo muestra: wa.me/1234567890 · info@dnxbaseball.com · @dnxbaseball — todos son placeholders. ¿Cuáles son los reales o cuáles crear antes del demo?</div>
+        <span class="item-tag tag-data">Contacto</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Soluciones<span>Colina</span></div>
-  <div>Bienes Raíces · Región del Biobío · Chile</div>
-  <div>© 2025</div>
-</footer>
+<!-- SECCIÓN 2 — DEMO TÉCNICO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-info">
+      <div class="section-title">Demo Técnico</div>
+      <div class="section-sub">El sitio web existe — falta publicarlo y poblarlo con data real</div>
+    </div>
+    <span class="section-badge badge-pending">🟡 En progreso</span>
+  </div>
+  <div class="items">
+    <div class="item info done" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">10 páginas HTML del demo construidas y listas</div>
+        <div class="item-desc">Homepage · Directorio de prospectos · 6 perfiles individuales · Página para scouts · Página de academias. Diseño v3 editorial deportivo aplicado. Fondo blanco con hero oscuro. Listo para subir a GitHub.</div>
+        <span class="item-tag tag-tech">✓ Completado</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Claude + Wilson</div><div class="item-phase">✓ Hecho</div></div>
+    </div>
+
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Subir el demo a GitHub y publicar con GitHub Pages o Vercel</div>
+        <div class="item-desc">Mismo proceso que el sitio de Soluciones Colina — Claude Code + GitHub + Vercel. En 10 minutos el demo tiene URL pública. Ejemplo resultado esperado: dnx-demo.vercel.app o dnx-baseball.github.io</div>
+        <span class="item-tag tag-tech">Claude Code · GitHub · Vercel</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Reemplazar perfiles ficticios con jugadores reales</div>
+        <div class="item-desc">Una vez que Vilma envíe el Excel, Claude genera los perfiles reales en HTML y los reemplazamos en el repositorio. Los 6 jugadores ficticios actuales salen, los reales entran. Proceso: 1 hora de trabajo.</div>
+        <span class="item-tag tag-tech">Requiere Excel de Vilma</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson + Claude</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Conectar videos reales en los perfiles</div>
+        <div class="item-desc">Una vez que Vilma suba los videos a YouTube o Google Drive, reemplazamos los placeholders de video en cada perfil con los embeds reales. El demo pasa de "video próximamente" a video real del jugador.</div>
+        <span class="item-tag tag-tech">Requiere videos de Vilma</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Aplicar nombre, logo y colores finales al demo</div>
+        <div class="item-desc">Una vez aprobados nombre, logo y paleta — aplicar al demo completo. Si se mantiene DNX/Diamond Nexus con la paleta actual, el cambio es mínimo. Si cambia el nombre, se actualiza en todos los archivos.</div>
+        <span class="item-tag tag-design">Requiere decisiones de marca</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson + Claude</div><div class="item-phase">Fase 0</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 3 — REUNIÓN HENRY -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-info">
+      <div class="section-title">Reunión con Henry</div>
+      <div class="section-sub">Alineación del equipo fundador antes de cualquier presentación externa</div>
+    </div>
+    <span class="section-badge badge-pending">🟡 Pendiente</span>
+  </div>
+  <div class="items">
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Reunión de alineación del equipo fundador</div>
+        <div class="item-desc">Henry (Florida) · Vilma (Venezuela) · Wilson + Giselle (Chile). Agenda: nombre final, estructura de participación, roles por ubicación, compromisos de cada parte, timeline del demo con data real.</div>
+        <span class="item-tag tag-action">Videollamada · Todos</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar contactos de academias a través de la red de Henry</div>
+        <div class="item-desc">Henry tiene red de contactos en MLB/IMG. ¿Conoce directores o entrenadores de academias en Venezuela o RD que pudieran ser las primeras academias certificadas DNX? Incluso un acuerdo verbal ya eleva el demo.</div>
+        <span class="item-tag tag-data">Red de Henry</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Preparar propuesta DNX ↔ IMG Academy de 1 página</div>
+        <div class="item-desc">Para que Henry la lleve a la próxima conversación con Roger. Estructura: qué es DNX · qué propone a IMG · el programa piloto de 3–5 becas · el modelo de participación en firmas. Claude la genera lista para imprimir.</div>
+        <span class="item-tag tag-action">Para Roger / IMG</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson + Claude</div><div class="item-phase">Fase 0</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 4 — IMG ACADEMY -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-info">
+      <div class="section-title">Presentación a IMG Academy</div>
+      <div class="section-sub">La oportunidad estratégica más importante del proyecto</div>
+    </div>
+    <span class="section-badge badge-pending">🟡 Pendiente</span>
+  </div>
+  <div class="items">
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Henry muestra el demo a Roger Cedeño</div>
+        <div class="item-desc">Con el demo publicado y la propuesta de 1 página lista, Henry tiene todo lo necesario para la próxima conversación con Roger. Roger ya sabe del proyecto — solo falta mostrarle algo concreto. Este es el momento más crítico de la Fase 0.</div>
+        <span class="item-tag tag-action">Henry → Roger → IMG</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 1</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Proponer programa piloto: 3–5 becas para talentos DNX en IMG</div>
+        <div class="item-desc">El programa piloto es la propuesta concreta — no un acuerdo marco genérico. IMG recibe prospectos venezolanos verificados DNX para sus equipos competitivos. DNX recibe validación institucional. Los jugadores acceden a la mejor academia del mundo.</div>
+        <span class="item-tag tag-action">Piloto concreto</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry + Roger</div><div class="item-phase">Fase 1</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="sum-item"><div class="sum-n" id="sumTotal">0</div><div class="sum-l">Total ítems</div></div>
+  <div class="sum-item"><div class="sum-n" id="sumDone" style="color:#3ecf6e">0</div><div class="sum-l">Completados</div></div>
+  <div class="sum-item"><div class="sum-n" id="sumPending" style="color:var(--gold)">0</div><div class="sum-l">Pendientes</div></div>
+  <div class="sum-item"><div class="sum-n" id="sumUrgent" style="color:var(--red)">0</div><div class="sum-l">Urgentes</div></div>
+</div>
+
+</main>
 
 <script>
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+function toggleItem(el) {
+  if(event.target.classList.contains('notes-toggle') || event.target.classList.contains('notes-input') || event.target.closest('.brand-option')) return;
+  el.classList.toggle('done');
+  updateProgress();
+  saveState();
+}
 
-  // Filtros
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      document.querySelectorAll('.gallery-card').forEach(card => {
-        card.classList.toggle('hidden', filter !== 'all' && card.dataset.type !== filter);
+function toggleNote(e, el) {
+  e.stopPropagation();
+  const input = el.nextElementSibling;
+  const show = input.style.display !== 'block';
+  input.style.display = show ? 'block' : 'none';
+  el.textContent = show ? '− Cerrar nota' : '+ Agregar nota';
+}
+
+function selectBrand(type, el, value) {
+  el.closest('#nameOptions').querySelectorAll('.brand-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  saveState();
+}
+
+function updateProgress() {
+  const items = document.querySelectorAll('.item');
+  const done = document.querySelectorAll('.item.done');
+  const urgent = document.querySelectorAll('.item.urgent:not(.done)');
+  const pct = items.length ? Math.round(done.length / items.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '%';
+  document.getElementById('sumTotal').textContent = items.length;
+  document.getElementById('sumDone').textContent = done.length;
+  document.getElementById('sumPending').textContent = items.length - done.length;
+  document.getElementById('sumUrgent').textContent = urgent.length;
+}
+
+function saveState() {
+  const state = {};
+  document.querySelectorAll('.item').forEach((el, i) => {
+    state['item_' + i] = el.classList.contains('done');
+    const note = el.querySelector('.notes-input');
+    if(note) state['note_' + i] = note.value;
+  });
+  const sel = document.querySelector('.brand-option.selected');
+  if(sel) state['brand_name'] = sel.querySelector('.bo-name').textContent;
+  try { localStorage.setItem('dnx_checklist', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const state = JSON.parse(localStorage.getItem('dnx_checklist') || '{}');
+    document.querySelectorAll('.item').forEach((el, i) => {
+      if(state['item_' + i]) el.classList.add('done');
+      const note = el.querySelector('.notes-input');
+      if(note && state['note_' + i]) note.value = state['note_' + i];
+    });
+    if(state['brand_name']) {
+      document.querySelectorAll('.brand-option').forEach(opt => {
+        if(opt.querySelector('.bo-name').textContent === state['brand_name']) {
+          opt.classList.add('selected');
+        }
       });
-    });
-  });
+    }
+  } catch(e) {}
+}
 
-  window.addEventListener('scroll', () => {
-    document.querySelector('nav').style.boxShadow =
-      window.scrollY > 40 ? '0 2px 20px rgba(0,0,0,0.08)' : 'none';
-  });
+loadState();
+updateProgress();
 </script>
 
 </body>
