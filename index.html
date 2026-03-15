@@ -509,6 +509,18 @@ function loadState() {
 
 loadState();
 updateProgress();
+
+// Auto-save cada 30 segundos
+setInterval(() => {
+  saveState();
+  const btn = document.getElementById('fabSave');
+  btn.classList.add('saved');
+  btn.innerHTML = '<span class="fab-icon">✓</span> Auto-guardado';
+  setTimeout(() => {
+    btn.classList.remove('saved');
+    btn.innerHTML = '<span class="fab-icon">💾</span> Guardar';
+  }, 2000);
+}, 30000);
 </script>
 
 </body>
