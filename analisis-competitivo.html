@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DNX · Análisis Competitivo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#0A0E1A;--navy:#0D1B4B;--red:#C0182C;--gold:#D4A017;--green:#1a6b3c;--paper:#FAFAF7;--g1:#1C2035;--g4:#8892A8;--bl2:#DDE2EE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+header{background:#fff;padding:16px 5%;border-bottom:3px solid var(--red);box-shadow:0 2px 12px rgba(13,27,75,.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.h-brand{display:flex;align-items:center;gap:14px}
+.h-title{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--g4)}
+.h-nav{display:flex;gap:8px}
+.h-nav a{font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g4);text-decoration:none;padding:6px 14px;border:1.5px solid var(--bl2);transition:all .2s}
+.h-nav a:hover,.h-nav a.active{color:var(--navy);border-color:var(--navy);background:rgba(13,27,75,.04)}
+
+main{max-width:1000px;margin:0 auto;padding:40px 5% 80px}
+
+/* Hero */
+.hero{background:var(--navy);padding:40px 40px 36px;margin-bottom:48px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-40px;top:-40px;width:300px;height:300px;background:rgba(192,24,44,.08);border-radius:50%}
+.hero-label{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:2px;color:#fff;line-height:1;margin-bottom:12px}
+.hero-title span{color:var(--red)}
+.hero-desc{font-size:0.9rem;color:rgba(255,255,255,.65);line-height:1.6;max-width:620px;font-weight:300}
+.hero-meta{display:flex;gap:24px;margin-top:24px;flex-wrap:wrap}
+.hero-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
+
+/* Sections */
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--bl2)}
+.section-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);line-height:1;flex-shrink:0}
+.section-info{}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--navy)}
+.section-sub{font-size:0.82rem;color:var(--g4);margin-top:2px}
+
+/* Competitor cards */
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.comp-card{background:#fff;border:1.5px solid var(--bl2);padding:20px;border-top:4px solid var(--bl2)}
+.comp-card.main-threat{border-top-color:var(--red)}
+.comp-card.complementary{border-top-color:var(--green)}
+.comp-card.tech-ref{border-top-color:var(--gold)}
+.comp-card.generic{border-top-color:var(--g4)}
+.comp-name{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1px;color:var(--navy);line-height:1;margin-bottom:2px}
+.comp-url{font-size:0.72rem;color:var(--g4);margin-bottom:12px;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px}
+.comp-desc{font-size:0.82rem;color:var(--ink);line-height:1.55;font-weight:300;margin-bottom:14px}
+.comp-features{list-style:none;margin-bottom:14px}
+.comp-features li{font-size:0.78rem;color:var(--g4);line-height:1.6;padding-left:14px;position:relative;font-weight:300}
+.comp-features li::before{content:'·';position:absolute;left:0;color:var(--red)}
+.comp-tag{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:2px}
+.tag-threat{background:rgba(192,24,44,.08);color:var(--red);border:1px solid rgba(192,24,44,.2)}
+.tag-complement{background:rgba(26,107,60,.08);color:var(--green);border:1px solid rgba(26,107,60,.2)}
+.tag-learn{background:rgba(212,160,23,.08);color:var(--gold);border:1px solid rgba(212,160,23,.2)}
+.tag-generic{background:rgba(136,146,168,.1);color:var(--g4);border:1px solid rgba(136,146,168,.25)}
+.comp-verdict{margin-top:12px;padding:10px 14px;background:var(--paper);border-left:3px solid var(--bl2);font-size:0.78rem;color:var(--ink);line-height:1.5;font-weight:300}
+.comp-verdict strong{font-weight:600;color:var(--navy)}
+
+/* Matrix table */
+.matrix-wrap{overflow-x:auto;margin-top:4px}
+table.matrix{width:100%;border-collapse:collapse;font-size:0.78rem;min-width:700px}
+table.matrix thead tr{background:var(--navy)}
+table.matrix thead th{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.85);padding:10px 12px;text-align:center;font-size:0.68rem;white-space:nowrap}
+table.matrix thead th:first-child{text-align:left}
+table.matrix tbody tr:nth-child(odd){background:#fff}
+table.matrix tbody tr:nth-child(even){background:rgba(13,27,75,.025)}
+table.matrix tbody tr.group-header td{background:var(--g1);color:rgba(255,255,255,.6);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:0.62rem;padding:6px 12px}
+table.matrix tbody td{padding:9px 12px;border-bottom:1px solid var(--bl2);text-align:center;color:var(--ink);vertical-align:middle}
+table.matrix tbody td:first-child{text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.82rem;letter-spacing:0.3px}
+table.matrix tbody td.dnx{background:rgba(13,27,75,.04);font-weight:700}
+.icon-yes{color:var(--green);font-size:0.9rem}
+.icon-no{color:#ccc;font-size:0.9rem}
+.icon-partial{color:var(--gold);font-size:0.9rem}
+.icon-advantage{color:var(--red);font-size:0.9rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;font-weight:700}
+
+/* Gap cards */
+.gap-grid{display:flex;flex-direction:column;gap:16px}
+.gap-card{background:#fff;border:1.5px solid var(--bl2);padding:20px 22px;border-left:5px solid var(--bl2);display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start}
+.gap-card.critical{border-left-color:var(--red)}
+.gap-card.important{border-left-color:var(--gold)}
+.gap-card.advantage{border-left-color:var(--green)}
+.gap-num{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;color:var(--bl2)}
+.gap-card.critical .gap-num{color:rgba(192,24,44,.2)}
+.gap-card.important .gap-num{color:rgba(212,160,23,.25)}
+.gap-card.advantage .gap-num{color:rgba(26,107,60,.2)}
+.gap-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0.5px;color:var(--ink);margin-bottom:6px}
+.gap-desc{font-size:0.82rem;color:var(--g4);line-height:1.6;font-weight:300}
+.gap-how{margin-top:10px;padding:10px 14px;border:1px dashed var(--bl2);font-size:0.78rem;color:var(--navy);line-height:1.5;font-weight:300}
+.gap-how strong{font-weight:600}
+
+/* Roadmap */
+.roadmap{display:flex;flex-direction:column;gap:0}
+.roadmap-item{display:grid;grid-template-columns:40px 1fr;gap:0;position:relative}
+.roadmap-item:not(:last-child) .road-line::after{content:'';position:absolute;left:19px;top:40px;bottom:0;width:2px;background:var(--bl2)}
+.road-line{position:relative;display:flex;justify-content:center;padding-top:10px}
+.road-dot{width:20px;height:20px;border-radius:50%;border:3px solid var(--bl2);background:#fff;z-index:1;flex-shrink:0}
+.road-dot.p1{border-color:var(--red);background:var(--red)}
+.road-dot.p2{border-color:var(--navy);background:var(--navy)}
+.road-dot.p3{border-color:var(--gold);background:var(--gold)}
+.road-dot.p4{border-color:var(--gold);background:var(--gold)}
+.road-dot.p5{border-color:var(--g4);background:var(--g4)}
+.road-content{background:#fff;border:1.5px solid var(--bl2);padding:16px 18px;margin:4px 0 4px 12px}
+.road-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.road-priority{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--red);line-height:1;min-width:22px}
+.road-title{font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;font-weight:700;letter-spacing:0.5px;color:var(--ink);flex:1}
+.road-phase{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 10px;border-radius:2px}
+.phase-mvp{background:rgba(192,24,44,.08);color:var(--red);border:1px solid rgba(192,24,44,.2)}
+.phase-2{background:rgba(13,27,75,.06);color:var(--navy);border:1px solid rgba(13,27,75,.15)}
+.phase-3{background:rgba(212,160,23,.08);color:var(--gold);border:1px solid rgba(212,160,23,.2)}
+.road-desc{font-size:0.8rem;color:var(--g4);line-height:1.55;font-weight:300}
+.road-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.road-tag{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;background:var(--paper);border:1px solid var(--bl2);color:var(--g4)}
+
+/* Positioning table */
+.pos-table{width:100%;border-collapse:collapse}
+.pos-table thead tr{background:var(--navy)}
+.pos-table thead th{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.85);padding:12px 16px;text-align:left;font-size:0.72rem}
+.pos-table tbody tr{border-bottom:1px solid var(--bl2);background:#fff}
+.pos-table tbody tr:nth-child(even){background:rgba(13,27,75,.02)}
+.pos-table tbody td{padding:14px 16px;font-size:0.82rem;color:var(--ink);line-height:1.5;vertical-align:top}
+.pos-table tbody td:first-child{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.88rem;color:var(--navy)}
+.pos-table tbody td:nth-child(2){color:var(--g4);font-weight:300}
+.pos-table tbody td:nth-child(3){color:var(--ink);font-weight:300}
+
+/* Lesson cards (Sporple) */
+.lesson-grid{display:flex;flex-direction:column;gap:16px}
+.lesson-card{background:#fff;border:1.5px solid var(--bl2);padding:20px 22px}
+.lesson-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px}
+.lesson-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);line-height:1;flex-shrink:0}
+.lesson-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0.5px;color:var(--navy);margin-bottom:4px}
+.lesson-desc{font-size:0.82rem;color:var(--g4);line-height:1.6;font-weight:300}
+.lesson-apply{margin-top:12px;padding:12px 16px;background:rgba(13,27,75,.04);border-left:4px solid var(--navy);font-size:0.82rem;color:var(--ink);line-height:1.5;font-weight:300}
+.lesson-apply strong{font-weight:600;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;text-transform:uppercase;font-size:0.72rem;color:var(--navy)}
+
+/* Compare table (Sporple vs DNX) */
+.compare-table{width:100%;border-collapse:collapse;margin-top:24px}
+.compare-table thead tr{background:var(--g1)}
+.compare-table thead th{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.7);padding:10px 16px;text-align:left;font-size:0.68rem}
+.compare-table tbody tr{border-bottom:1px solid var(--bl2)}
+.compare-table tbody tr:nth-child(odd){background:#fff}
+.compare-table tbody tr:nth-child(even){background:rgba(192,24,44,.02)}
+.compare-table tbody td{padding:12px 16px;font-size:0.82rem;line-height:1.5;vertical-align:top}
+.compare-table tbody td:first-child{color:var(--red);font-weight:300}
+.compare-table tbody td:last-child{color:var(--green);font-weight:300}
+
+/* Conclusion */
+.conclusion{background:var(--navy);padding:36px 40px;margin-top:48px}
+.conclusion-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:#fff;margin-bottom:16px}
+.conclusion-title span{color:var(--gold)}
+.conclusion-text{font-size:0.88rem;color:rgba(255,255,255,.7);line-height:1.7;font-weight:300;max-width:720px;margin-bottom:20px}
+.conclusion-points{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:24px}
+.conc-point{padding:16px;border:1px solid rgba(255,255,255,.1)}
+.conc-icon{font-size:1.4rem;margin-bottom:8px}
+.conc-label{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px}
+.conc-text{font-size:0.82rem;color:rgba(255,255,255,.75);line-height:1.45;font-weight:300}
+
+/* Spoiler / alert box */
+.alert{padding:14px 18px;margin-bottom:20px;border-left:4px solid;font-size:0.82rem;line-height:1.6;font-weight:300}
+.alert-red{background:rgba(192,24,44,.05);border-color:var(--red);color:var(--ink)}
+.alert-navy{background:rgba(13,27,75,.05);border-color:var(--navy);color:var(--ink)}
+.alert-gold{background:rgba(212,160,23,.08);border-color:var(--gold);color:var(--ink)}
+.alert strong{font-weight:600}
+
+@media(max-width:640px){
+  .comp-grid{grid-template-columns:1fr}
+  .gap-card{grid-template-columns:1fr}
+  .gap-num{font-size:1.4rem}
+  .hero-title{font-size:2rem}
+  .conclusion{padding:24px 20px}
+  .pos-table{font-size:0.75rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-brand">
+    <img src="https://solucionescolinahome.wordpress.com/wp-content/uploads/2026/03/sin-titulo.png" alt="DNX" height="80" style="display:block">
+    <span class="h-title">Diamond Nexus · Análisis Competitivo</span>
+  </div>
+  <div class="h-nav">
+    <a href="index.html">Checklist</a>
+    <a href="analisis-competitivo.html" class="active">Competidores</a>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Documento de Uso Interno — Equipo Fundador</div>
+  <div class="hero-title">Análisis <span>Competitivo</span><br/>y Hoja de Ruta</div>
+  <div class="hero-desc">Evaluación de las principales plataformas globales de scouting y talento deportivo. Identificación de brechas estratégicas y prioridades tecnológicas para posicionar DNX como líder en el mercado de talento deportivo latinoamericano.</div>
+  <div class="hero-meta">
+    <span class="hero-badge">5 Competidores Analizados</span>
+    <span class="hero-badge">Béisbol Latino + Firmas MLB</span>
+    <span class="hero-badge">Marzo 2026</span>
+    <span class="hero-badge">CONFIDENCIAL</span>
+  </div>
+</div>
+
+<!-- SECCIÓN 1 — PERFILES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-info">
+      <div class="section-title">Perfiles de Competidores Analizados</div>
+      <div class="section-sub">Plataformas activas en el mercado global de scouting y talento deportivo</div>
+    </div>
+  </div>
+
+  <div class="comp-grid">
+
+    <!-- ScoutUs Pro -->
+    <div class="comp-card main-threat">
+      <div class="comp-name">ScoutUs Pro</div>
+      <div class="comp-url">scoutuspro.com</div>
+      <div class="comp-desc">Plataforma global de base de datos de scouting. App gratuita para atletas + suscripción web para scouts, agentes y managers. Más de 90 países, disponible en inglés, español y japonés.</div>
+      <ul class="comp-features">
+        <li>Perfil de atleta con estadísticas y video highlights</li>
+        <li>Mensajería directa atleta-scout</li>
+        <li>Filtros avanzados por deporte, posición, país</li>
+        <li>Deportes: béisbol, fútbol, boxeo/MMA</li>
+        <li>Alianza con ABCA (American Baseball Coaches Association)</li>
+      </ul>
+      <span class="comp-tag tag-threat">Competidor Directo</span>
+      <div class="comp-verdict"><strong>Limitación crítica:</strong> Sin presencia operativa en Venezuela o RD. No está optimizado para el proceso de firmas MLB. Sin conexión institucional con academias de élite.</div>
+    </div>
+
+    <!-- NCSA -->
+    <div class="comp-card complementary">
+      <div class="comp-name">NCSA</div>
+      <div class="comp-url">ncsasports.org · Parte de IMG Academy</div>
+      <div class="comp-desc">La plataforma de reclutamiento universitario más grande del mundo. 40,000+ entrenadores universitarios activos. 37 deportes. Membresías premium con coaching 1:1.</div>
+      <ul class="comp-features">
+        <li>Motor de match académico-atlético con algoritmo de compatibilidad</li>
+        <li>Seguimiento: el atleta ve cuándo un entrenador visita su perfil</li>
+        <li>Coaching personalizado con ex-atletas universitarios</li>
+        <li>Integración con IMG Academy+ (mental, nutrición)</li>
+        <li>$21M en servicios donados a atletas en necesidad (2024)</li>
+      </ul>
+      <span class="comp-tag tag-complement">Complementario — No Rival</span>
+      <div class="comp-verdict"><strong>Relevancia estratégica:</strong> NCSA es reclutamiento universitario NCAA. DNX es firmas profesionales MLB. Son mercados distintos del mismo talento. La alianza con IMG los hace socios potenciales, no enemigos.</div>
+    </div>
+
+    <!-- aiScout -->
+    <div class="comp-card tech-ref">
+      <div class="comp-name">aiScout</div>
+      <div class="comp-url">ai.io</div>
+      <div class="comp-desc">La plataforma tecnológicamente más avanzada. IA + visión computacional para análisis de video desde celular. 250,000+ jugadores. Actualmente fútbol, expandiéndose a béisbol.</div>
+      <ul class="comp-features">
+        <li>75 ejercicios estándar grabados con celular — IA analiza automáticamente</li>
+        <li>Score por métricas específicas + benchmarking global</li>
+        <li>Pruebas virtuales para clubes específicos</li>
+        <li>Alianzas: MLS (45,000+ atletas), Chelsea FC, Burnley FC, IOC, ATP</li>
+        <li>135+ jugadores fichados o probados a través de la app</li>
+      </ul>
+      <span class="comp-tag tag-learn">Referencia Tecnológica</span>
+      <div class="comp-verdict"><strong>Lección para DNX:</strong> El análisis de video con IA desde celular ya es el estándar que el mercado acepta. DNX debe incorporarlo en Fase 2 — especialmente para pitching, bateo y velocidad de lanzamiento.</div>
+    </div>
+
+    <!-- Sporple / Starprospect -->
+    <div class="comp-card generic">
+      <div class="comp-name">Sporple / Starprospect</div>
+      <div class="comp-url">LinkedIn deportivo genérico · Multi-deporte</div>
+      <div class="comp-desc">Plataformas de networking deportivo sin especialización. Perfiles, video showcases, mensajería, filtros, suscripción premium para scouts. Sporple añade matching y eventos físicos; Starprospect añade evaluación y feedback.</div>
+      <ul class="comp-features">
+        <li>Confirman que el marketplace talento-scout tiene demanda real</li>
+        <li>Su debilidad principal es la falta de especialización</li>
+        <li>Sporple ya no opera bajo su modelo original (caso de estudio)</li>
+      </ul>
+      <span class="comp-tag tag-generic">Referencia — Modelo Caído</span>
+      <div class="comp-verdict"><strong>Relevancia:</strong> DNX supera a estos con su enfoque específico en béisbol latino y conexión institucional con IMG. La generalidad los hizo vulnerables. Ver Sección 6.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECCIÓN 2 — MATRIZ COMPARATIVA -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-info">
+      <div class="section-title">Matriz Comparativa de Características</div>
+      <div class="section-sub">DNX vs. los 5 competidores principales en todas las dimensiones relevantes</div>
+    </div>
+  </div>
+
+  <div class="alert alert-navy">
+    <strong>Leyenda:</strong> &nbsp; ✅ Disponible y activo &nbsp;·&nbsp; ❌ No disponible &nbsp;·&nbsp; ⚠️ Parcial o en desarrollo &nbsp;·&nbsp; <strong style="color:var(--red)">🚀 Ventaja exclusiva DNX</strong>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="text-align:left;min-width:220px">Característica</th>
+          <th>ScoutUs Pro</th>
+          <th>NCSA</th>
+          <th>aiScout</th>
+          <th>Sporple</th>
+          <th>Starprospect</th>
+          <th style="background:rgba(192,24,44,.25)">DNX</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="group-header"><td colspan="7">CARACTERÍSTICAS CORE</td></tr>
+        <tr>
+          <td>Perfil de atleta con foto y stats</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td>
+          <td class="dnx"><span class="icon-yes">✅</span></td>
+        </tr>
+        <tr>
+          <td>Carga de video highlights</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td>
+          <td class="dnx"><span class="icon-yes">✅</span></td>
+        </tr>
+        <tr>
+          <td>Búsqueda y filtros para scouts</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td>
+          <td class="dnx"><span class="icon-yes">✅</span></td>
+        </tr>
+        <tr>
+          <td>Mensajería directa atleta-scout</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td>
+          <td class="dnx"><span class="icon-yes">✅</span></td>
+        </tr>
+        <tr>
+          <td>App móvil iOS + Android</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-partial">⚠️</span></td>
+          <td class="dnx"><span class="icon-yes">✅</span></td>
+        </tr>
+        <tr>
+          <td>Modo offline</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Multi-idioma — Español nativo</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+
+        <tr class="group-header"><td colspan="7">TECNOLOGÍA AVANZADA</td></tr>
+        <tr>
+          <td>IA análisis de video desde celular</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-partial">⚠️ Fase 2</span></td>
+        </tr>
+        <tr>
+          <td>Score automático de rendimiento</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-partial">⚠️</span></td>
+          <td class="dnx"><span class="icon-partial">⚠️ Fase 1</span></td>
+        </tr>
+        <tr>
+          <td>Ranking automático de prospectos</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-partial">⚠️</span></td>
+          <td class="dnx"><span class="icon-partial">⚠️ Fase 1</span></td>
+        </tr>
+        <tr>
+          <td>Algoritmo matching talento-organización</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-partial">⚠️ Fase 3</span></td>
+        </tr>
+        <tr>
+          <td>Benchmarking vs base de datos global</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-partial">⚠️ Fase 3</span></td>
+        </tr>
+
+        <tr class="group-header"><td colspan="7">ESPECIALIZACIÓN DE MERCADO</td></tr>
+        <tr>
+          <td>Enfoque béisbol latinoamericano</td>
+          <td><span class="icon-partial">⚠️</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Orientado a firmas MLB profesional</td>
+          <td><span class="icon-partial">⚠️</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Conexión con academias élite (IMG)</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Red operativa en Venezuela</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Red operativa en Rep. Dominicana</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+
+        <tr class="group-header"><td colspan="7">MODELO DE NEGOCIO</td></tr>
+        <tr>
+          <td>App atleta gratuita + scout suscripción</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-partial">⚠️</span></td>
+          <td class="dnx"><span class="icon-yes">✅</span></td>
+        </tr>
+        <tr>
+          <td>Participación en firmas (% signing bonus)</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Certificación de academias</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Organización de showcases/eventos</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td>
+          <td class="dnx"><span class="icon-yes">✅</span></td>
+        </tr>
+        <tr>
+          <td>Programa de becas con academia élite</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+
+        <tr class="group-header"><td colspan="7">CREDIBILIDAD INSTITUCIONAL</td></tr>
+        <tr>
+          <td>Respaldo de exjugadores MLB</td>
+          <td><span class="icon-yes">✅</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Alianza con organización profesional</td>
+          <td><span class="icon-partial">⚠️</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-yes">✅</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+        <tr>
+          <td>Base de datos verificada/certificada</td>
+          <td><span class="icon-no">❌</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-partial">⚠️</span></td><td><span class="icon-no">❌</span></td><td><span class="icon-no">❌</span></td>
+          <td class="dnx"><span class="icon-advantage">🚀</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert alert-navy" style="margin-top:20px">
+    <strong>Lectura de la matriz:</strong> DNX arranca con ventajas únicas en especialización, modelo de negocio y credibilidad institucional — donde ningún competidor tiene presencia. Las brechas tecnológicas (IA de video, ranking automático) son implementables en Fase 2 con bajo costo usando APIs existentes.
+  </div>
+</div>
+
+<!-- SECCIÓN 3 — BRECHAS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-info">
+      <div class="section-title">Brechas Identificadas</div>
+      <div class="section-sub">Lo que DNX debe implementar, ordenado por prioridad estratégica</div>
+    </div>
+  </div>
+
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:14px">Brechas Críticas — MVP o Fase 1</div>
+  <div class="gap-grid" style="margin-bottom:32px">
+
+    <div class="gap-card critical">
+      <div class="gap-num">01</div>
+      <div>
+        <div class="gap-title">Análisis de Video con IA desde Celular</div>
+        <div class="gap-desc">aiScout lo tiene y es su diferenciador principal. MLS lo usa con 45,000 atletas. En 2026, un scout espera datos objetivos de mecánicas, no solo video sin analizar. Para béisbol: velocidad de lanzamiento, ángulo del brazo, mecánica de bateo, tiempo de sprint.</div>
+        <div class="gap-how"><strong>Cómo implementar en DNX:</strong> Integrar Google Vision API o MediaPipe (gratuito y open source de Google) para análisis básico de movimiento. Costo cercano a $0 para volumen bajo. Compatible con cualquier celular. No requiere hardware especializado. → Fase 2</div>
+      </div>
+    </div>
+
+    <div class="gap-card critical">
+      <div class="gap-num">02</div>
+      <div>
+        <div class="gap-title">DNX Score — Ranking Automático de Prospectos</div>
+        <div class="gap-desc">Es lo que convierte la plataforma de directorio en herramienta de inteligencia. Un scout no quiere ver 500 perfiles — quiere ver los Top 20 por posición, edad y país. El ranking es el producto que pagan. aiScout y NCSA ya lo tienen. Henry lo llamó originalmente 'BTP Talent Score'.</div>
+        <div class="gap-how"><strong>Cómo implementar:</strong> Algoritmo propio basado en datos que el jugador carga (velocidad, estadísticas, evaluación de video). No necesita IA avanzada para la versión inicial — una fórmula ponderada de métricas ya genera un score útil. Se refina con datos reales en Fase 2. → Fase 1 / MVP</div>
+      </div>
+    </div>
+
+    <div class="gap-card critical">
+      <div class="gap-num">03</div>
+      <div>
+        <div class="gap-title">Modo Offline Robusto</div>
+        <div class="gap-desc">Ningún competidor lo tiene — es ventaja exclusiva para el contexto venezolano. Venezuela tiene conectividad intermitente. Un entrenador o jugador en campo no puede depender de internet para cargar data. Si la app no funciona offline, la adopción en Venezuela será muy baja.</div>
+        <div class="gap-how"><strong>Cómo implementar:</strong> React Native con AsyncStorage para datos locales. Sincronización automática cuando hay conexión. <strong>Decisión de arquitectura que debe tomarse desde el Día 1 del desarrollo — no se puede añadir fácilmente después.</strong> → MVP</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px">Brechas Importantes — Fase 2–3</div>
+  <div class="gap-grid" style="margin-bottom:32px">
+
+    <div class="gap-card important">
+      <div class="gap-num">04</div>
+      <div>
+        <div class="gap-title">Seguimiento de Actividad del Scout</div>
+        <div class="gap-desc">NCSA permite al atleta ver cuándo un entrenador visitó su perfil. Es una feature de alto valor percibido — el jugador sabe que alguien lo está mirando. Bajo costo técnico. → Fase 2</div>
+      </div>
+    </div>
+
+    <div class="gap-card important">
+      <div class="gap-num">05</div>
+      <div>
+        <div class="gap-title">Módulo de Eventos y Showcases Digitales</div>
+        <div class="gap-desc">Sporple y Starprospect organizan eventos físicos y virtuales. DNX debe tener capacidad de organizar showcases donde jugadores certificados son evaluados en vivo por scouts. Conecta el mundo digital con el físico. Requiere operación en terreno. → Fase 3</div>
+      </div>
+    </div>
+
+    <div class="gap-card important">
+      <div class="gap-num">06</div>
+      <div>
+        <div class="gap-title">Algoritmo de Matching Inteligente</div>
+        <div class="gap-desc">NCSA tiene motor que sugiere qué universidades le convienen a cada atleta. DNX puede tener equivalente: qué organizaciones MLB históricamente firman jugadores con el perfil del prospecto. Requiere datos reales acumulados. → Fase 3</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:14px">Ventajas Exclusivas — Defender y Ampliar</div>
+  <div class="gap-grid">
+
+    <div class="gap-card advantage">
+      <div class="gap-num">V1</div>
+      <div>
+        <div class="gap-title">Especialización Béisbol Latino + Conexión IMG</div>
+        <div class="gap-desc">Ningún competidor tiene esto. La red humana de la Fundación, la conexión con Roger en IMG, y el conocimiento del mercado venezolano no se pueden copiar con código. <strong>Defender esta ventaja manteniendo la especialización — no diluirla siendo genéricos.</strong></div>
+      </div>
+    </div>
+
+    <div class="gap-card advantage">
+      <div class="gap-num">V2</div>
+      <div>
+        <div class="gap-title">Certificación de Academias + Sello DNX</div>
+        <div class="gap-desc">Ningún competidor certifica academias. El sello "Academia Certificada DNX" crea un estándar de calidad que los scouts confiarán. Data verificada, procesos auditados, credibilidad ante MLB. Esto convierte a DNX de directorio en institución.</div>
+      </div>
+    </div>
+
+    <div class="gap-card advantage">
+      <div class="gap-num">V3</div>
+      <div>
+        <div class="gap-title">Participación en Firmas (% Signing Bonus)</div>
+        <div class="gap-desc">Ninguna plataforma del mercado tiene este modelo de ingresos. Es lo que convierte a DNX de plataforma de datos en socio del éxito del jugador. Requiere estructurar acuerdos legales claros con el jugador y/o su academia desde que el perfil es creado. → Fase 3 con asesoría legal especializada.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 4 — HOJA DE RUTA -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-info">
+      <div class="section-title">Hoja de Ruta Tecnológica</div>
+      <div class="section-sub">Prioridades por fase — maximiza valor competitivo sin sobrecargar el presupuesto inicial</div>
+    </div>
+  </div>
+
+  <div class="alert alert-navy" style="margin-bottom:24px">
+    <strong>Principio guía:</strong> DNX no necesita tener todas las features del mercado desde el Día 1. Necesita hacer MUY BIEN las cosas que ningún competidor puede hacer. Las features tecnológicas se agregan por fases. La ventaja institucional se construye desde el primer día.
+  </div>
+
+  <div class="roadmap">
+    <div class="roadmap-item">
+      <div class="road-line"><div class="road-dot p1"></div></div>
+      <div class="road-content">
+        <div class="road-top">
+          <div class="road-priority">P1</div>
+          <div class="road-title">Modo offline + sincronización automática</div>
+          <span class="road-phase phase-mvp">MVP — Fase 1</span>
+        </div>
+        <div class="road-desc">Crítico para adopción en Venezuela. Sin esto la app no funciona en campo. Es la decisión de arquitectura más importante — debe tomarse en el Día 1 del desarrollo. Ningún competidor lo tiene.</div>
+        <div class="road-tags"><span class="road-tag">Esfuerzo: Alto</span><span class="road-tag">Impacto: Crítico</span><span class="road-tag">React Native + AsyncStorage</span></div>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="road-line"><div class="road-dot p2"></div></div>
+      <div class="road-content">
+        <div class="road-top">
+          <div class="road-priority">P2</div>
+          <div class="road-title">DNX Score — Ranking automático básico (fórmula ponderada)</div>
+          <span class="road-phase phase-mvp">MVP — Fase 1</span>
+        </div>
+        <div class="road-desc">Diferenciador inmediato vs. competidores. Convierte el directorio en herramienta inteligente. No requiere IA — una fórmula ponderada de métricas ya genera un score útil que los scouts valoran. Se refina con datos reales.</div>
+        <div class="road-tags"><span class="road-tag">Esfuerzo: Medio</span><span class="road-tag">Impacto: Alto</span><span class="road-tag">Algoritmo propio</span></div>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="road-line"><div class="road-dot p3"></div></div>
+      <div class="road-content">
+        <div class="road-top">
+          <div class="road-priority">P3</div>
+          <div class="road-title">Panel scout con filtros avanzados + seguimiento de visitas</div>
+          <span class="road-phase phase-2">Fase 2</span>
+        </div>
+        <div class="road-desc">Estándar de mercado — NCSA lo tiene. Alto valor percibido para el scout: sabe exactamente qué perfiles ha visto y el jugador sabe que lo están mirando. Genera engagement en ambos lados de la plataforma.</div>
+        <div class="road-tags"><span class="road-tag">Esfuerzo: Medio</span><span class="road-tag">Impacto: Alto</span></div>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="road-line"><div class="road-dot p4"></div></div>
+      <div class="road-content">
+        <div class="road-top">
+          <div class="road-priority">P4</div>
+          <div class="road-title">Análisis de video con IA — béisbol (pitching, bateo, velocidad)</div>
+          <span class="road-phase phase-2">Fase 2</span>
+        </div>
+        <div class="road-desc">Paridad con aiScout. Análisis de pitching, mecánica de bateo y velocidad desde celular. Usar Google Vision API o MediaPipe (open source). Costo cercano a $0 por análisis en volumen bajo. No requiere hardware especializado.</div>
+        <div class="road-tags"><span class="road-tag">Esfuerzo: Alto</span><span class="road-tag">Impacto: Muy Alto</span><span class="road-tag">Google Vision / MediaPipe</span></div>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="road-line"><div class="road-dot p5"></div></div>
+      <div class="road-content">
+        <div class="road-top">
+          <div class="road-priority">P5</div>
+          <div class="road-title">Módulo de showcases y eventos digitales/físicos</div>
+          <span class="road-phase phase-3">Fase 3</span>
+        </div>
+        <div class="road-desc">Fuente de ingresos adicional. Conecta la plataforma digital con presencia física en Venezuela y RD. Requiere operación en terreno coordinada con la Fundación y academias certificadas.</div>
+        <div class="road-tags"><span class="road-tag">Esfuerzo: Alto</span><span class="road-tag">Impacto: Estratégico</span><span class="road-tag">Requiere operación física</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 5 — POSICIONAMIENTO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-info">
+      <div class="section-title">Posicionamiento Estratégico DNX</div>
+      <div class="section-sub">Por qué DNX gana en su mercado contra cada competidor</div>
+    </div>
+  </div>
+
+  <table class="pos-table">
+    <thead>
+      <tr>
+        <th>Competidor</th>
+        <th>Su fortaleza</th>
+        <th>Por qué DNX gana en su mercado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ScoutUs Pro</td>
+        <td>Global, multi-deporte, app gratuita, 90+ países</td>
+        <td>DNX tiene especialización profunda en béisbol latino y conexión institucional que ScoutUs Pro no puede replicar desde California. Sin presencia operativa en Venezuela ni RD.</td>
+      </tr>
+      <tr>
+        <td>NCSA</td>
+        <td>40,000 entrenadores universitarios, parte de IMG, mayor del mundo NCAA</td>
+        <td>NCSA es para reclutamiento universitario americano. DNX es para firmas profesionales MLB desde Latinoamérica. No compiten — se complementan. SportsRecruits (similar a NCSA) fue adquirida por IMG Academy en mayo 2025.</td>
+      </tr>
+      <tr>
+        <td>aiScout</td>
+        <td>IA más avanzada del mercado, Chelsea FC, MLS, 250,000 jugadores</td>
+        <td>aiScout es de fútbol. Sin presencia en béisbol latino ni en firmas MLB. DNX puede integrar tecnología similar en Fase 2 a bajo costo usando APIs disponibles.</td>
+      </tr>
+      <tr>
+        <td>Sporple / Starprospect</td>
+        <td>Networking deportivo genérico, multi-deporte</td>
+        <td>La generalidad es su debilidad — Sporple ya no opera. Un scout de MLB busca béisbol venezolano, no una plataforma genérica. DNX gana por especialización absoluta.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECCIÓN 6 — LECCIÓN SPORPLE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-info">
+      <div class="section-title">La Lección Sporple</div>
+      <div class="section-sub">El caso de estudio más relevante — un manual de errores a evitar</div>
+    </div>
+  </div>
+
+  <div class="alert alert-red" style="margin-bottom:24px">
+    <strong>Sporple ya no opera bajo su modelo original.</strong> Nació con una propuesta sólida: conectar atletas y clubes globalmente. No logró sobrevivir en un mercado que evolucionó más rápido que su plataforma. Su historia define exactamente lo que DNX no debe hacer.
+  </div>
+
+  <div class="lesson-grid" style="margin-bottom:28px">
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <div class="lesson-num">1</div>
+        <div>
+          <div class="lesson-title">Pérdida de tracción por falta de especialización</div>
+          <div class="lesson-desc">Plataformas como SportsRecruits y Stack Athlete dominaron ofreciendo integraciones más profundas con universidades y ligas profesionales. Sporple no pudo competir en especialización frente a herramientas enfocadas.</div>
+        </div>
+      </div>
+      <div class="lesson-apply"><strong>Aplicación a DNX →</strong> Béisbol latinoamericano, firmas MLB, academias certificadas. Ese es el núcleo. Resistir la tentación de agregar otros deportes en los primeros dos años. La expansión solo tiene sentido cuando el núcleo esté validado y rentable.</div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <div class="lesson-num">2</div>
+        <div>
+          <div class="lesson-title">Fracaso en el pivotaje tecnológico</div>
+          <div class="lesson-desc">Cuando el mercado exigió pasar de red social a software de gestión para clubes (AMS), Sporple no logró la transición tecnológica ni financiera. Sus servicios quedaron inactivos gradualmente. Las plataformas que sobrevivieron (SportsRecruits, NCSA, Stack Athlete) lo hicieron porque se integraron profundamente con instituciones.</div>
+        </div>
+      </div>
+      <div class="lesson-apply"><strong>Aplicación a DNX →</strong> La relación con IMG Academy no es un beneficio secundario — es la columna vertebral de la permanencia del negocio. <strong>SportsRecruits fue adquirida por IMG Academy en mayo de 2025. IMG está comprando activamente plataformas de talento.</strong> Formalizar esa alianza es prioridad estratégica, no aspiración futura.</div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <div class="lesson-num">3</div>
+        <div>
+          <div class="lesson-title">Modelo de ingresos no diversificado</div>
+          <div class="lesson-desc">El sector se dividió en nichos: gestión de equipos (SportEasy), análisis de rendimiento (Vitruve, Checklick), reclutamiento universitario (CollegePipe, NCSA). Sporple no construyó fuentes de ingresos suficientemente diversas para sobrevivir la transición que el mercado exigía.</div>
+        </div>
+      </div>
+      <div class="lesson-apply"><strong>Aplicación a DNX →</strong> El modelo tiene cuatro fuentes de ingreso desde el diseño: suscripciones de academias, acceso scout premium, participación en firmas, organización de showcases. Esa diversificación es exactamente lo que Sporple no tuvo.</div>
+    </div>
+  </div>
+
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g4);margin-bottom:14px">Sporple vs DNX — Resumen Comparativo</div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Sporple — Lo que hizo mal</th>
+        <th>DNX — Lo que hace diferente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Genérico para todos los deportes</td><td>Especializado: béisbol latino y firmas MLB</td></tr>
+      <tr><td>Sin integración institucional profunda</td><td>Alianza directa con IMG Academy desde el inicio</td></tr>
+      <tr><td>Modelo de ingresos de una sola fuente</td><td>4 fuentes de ingresos diversificadas desde el diseño</td></tr>
+      <tr><td>Sin ventaja geográfica específica</td><td>Red operativa en Venezuela y RD sin competidor directo</td></tr>
+      <tr><td>No evolucionó tecnológicamente a tiempo</td><td>Roadmap tecnológico por fases con IA incorporada en Fase 2</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- CONCLUSIÓN -->
+<div class="conclusion">
+  <div class="conclusion-title">DNX tiene un espacio real<br/>y <span>defendible</span> en el mercado</div>
+  <div class="conclusion-text">La investigación confirma que el modelo de marketplace talento-scout existe y tiene demanda probada. Pero ningún competidor actual combina los elementos que hacen a DNX único: especialización en béisbol latinoamericano, conexión institucional con IMG Academy, certificación de academias independientes, y participación en el valor de las firmas profesionales.</div>
+  <div class="conclusion-text">Las brechas tecnológicas identificadas (IA de video, ranking automático) son implementables en Fase 2 con presupuesto bajo usando APIs disponibles. No son barreras de entrada — son mejoras que pueden añadirse sobre un MVP funcional.</div>
+  <div class="conclusion-points">
+    <div class="conc-point">
+      <div class="conc-label">Ventaja irreplicable</div>
+      <div class="conc-text">La red humana, la credibilidad institucional y la especialización geográfica no se compran con código. Ya existe en forma de la Fundación y la conexión con IMG.</div>
+    </div>
+    <div class="conc-point">
+      <div class="conc-label">Brechas tecnológicas</div>
+      <div class="conc-text">Implementables en Fase 2 con APIs existentes a bajo costo. No son barreras — son mejoras sobre un MVP funcional y competitivo.</div>
+    </div>
+    <div class="conc-point">
+      <div class="conc-label">Modelo defensible</div>
+      <div class="conc-text">4 fuentes de ingresos desde el diseño. Especialización absoluta. Integración institucional. Todo lo que Sporple no tuvo.</div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+</body>
+</html>
