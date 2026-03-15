@@ -1,887 +1,493 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FiscalIA — Fiscalización Inteligente de Subsidios</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DNX · Checklist de Lanzamiento</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --verde: #1a6b3c;
-    --verde-mid: #2d9b5a;
-    --verde-light: #e8f5ee;
-    --verde-glow: rgba(26,107,60,0.15);
-    --naranja: #d4560a;
-    --azul: #0d3b6e;
-    --dark: #0d1a0f;
-    --gray: #f4f6f4;
-    --text: #1a2a1c;
-    --muted: #5a6b5c;
-    --white: #ffffff;
-    --grid: rgba(26,107,60,0.06);
-  }
+:root{--ink:#0A0E1A;--navy:#0D1B4B;--red:#C0182C;--gold:#D4A017;--green:#1a6b3c;--paper:#FAFAF7;--g1:#1C2035;--g4:#8892A8;--bl2:#DDE2EE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+header{background:var(--ink);padding:20px 5%;border-bottom:3px solid var(--red);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.h-brand{display:flex;align-items:center;gap:10px}
+.h-dnx{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;background:var(--red);color:#fff;padding:2px 10px;clip-path:polygon(0 0,100% 0,96% 100%,0 100%)}
+.h-title{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--g4)}
+.h-progress{display:flex;align-items:center;gap:12px}
+.progress-bar{width:200px;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;transition:width .4s ease}
+.progress-label{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:1px;color:#fff}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+main{max-width:960px;margin:0 auto;padding:40px 5% 80px}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--dark);
-    color: var(--white);
-    overflow-x: hidden;
-  }
+.section{margin-bottom:40px}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--bl2)}
+.section-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);line-height:1;flex-shrink:0}
+.section-info{}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--navy)}
+.section-sub{font-size:0.82rem;color:var(--g4);margin-top:2px}
+.section-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.badge-urgent{background:rgba(192,24,44,.1);color:var(--red);border:1px solid rgba(192,24,44,.3)}
+.badge-pending{background:rgba(212,160,23,.1);color:var(--gold);border:1px solid rgba(212,160,23,.3)}
+.badge-done{background:rgba(26,107,60,.1);color:var(--green);border:1px solid rgba(26,107,60,.3)}
 
-  /* GRID BACKGROUND */
-  .grid-bg {
-    position: fixed; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(26,107,60,0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(26,107,60,0.07) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-  }
+.items{display:flex;flex-direction:column;gap:8px}
+.item{background:#fff;border:1.5px solid var(--bl2);padding:16px 18px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:border-color .2s,box-shadow .2s;user-select:none;border-left:4px solid transparent}
+.item:hover{box-shadow:0 2px 12px rgba(13,27,75,.08)}
+.item.done{border-left-color:var(--green);background:#f6fbf8}
+.item.urgent{border-left-color:var(--red)}
+.item.info{border-left-color:var(--navy)}
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 20px 60px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(13,26,15,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(26,107,60,0.2);
-  }
+.checkbox{width:22px;height:22px;border:2px solid var(--bl2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.item.done .checkbox{background:var(--green);border-color:var(--green)}
+.checkmark{color:#fff;font-size:0.85rem;opacity:0;transition:opacity .2s}
+.item.done .checkmark{opacity:1}
 
-  .nav-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    letter-spacing: -0.5px;
-  }
-  .nav-logo span { color: var(--naranja); }
+.item-body{flex:1}
+.item-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0.5px;color:var(--ink);margin-bottom:3px}
+.item.done .item-title{text-decoration:line-through;color:var(--g4)}
+.item-desc{font-size:0.82rem;color:var(--g4);line-height:1.55;font-weight:300}
+.item-tag{display:inline-block;margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px}
+.tag-action{background:rgba(192,24,44,.08);color:var(--red);border:1px solid rgba(192,24,44,.2)}
+.tag-data{background:rgba(13,27,75,.06);color:var(--navy);border:1px solid rgba(13,27,75,.15)}
+.tag-design{background:rgba(212,160,23,.08);color:var(--gold);border:1px solid rgba(212,160,23,.2)}
+.tag-tech{background:rgba(26,107,60,.08);color:var(--green);border:1px solid rgba(26,107,60,.2)}
 
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    color: rgba(255,255,255,0.6);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--white); }
+.item-meta{text-align:right;flex-shrink:0;min-width:80px}
+.item-who{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--g4)}
+.item-phase{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--navy);line-height:1;margin-top:2px}
 
-  .nav-cta {
-    background: var(--verde);
-    color: var(--white) !important;
-    padding: 10px 24px;
-    border-radius: 6px;
-    font-weight: 600 !important;
-    transition: background 0.2s !important;
-  }
-  .nav-cta:hover { background: var(--verde-mid) !important; }
+/* Notes area */
+.notes-area{margin-top:10px}
+.notes-input{width:100%;background:var(--paper);border:1px solid var(--bl2);padding:8px 12px;font-family:'Barlow',sans-serif;font-size:0.8rem;color:var(--ink);resize:vertical;min-height:48px;outline:none;transition:border-color .2s;display:none}
+.notes-input:focus{border-color:var(--navy)}
+.notes-toggle{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--g4);cursor:pointer;margin-top:6px;display:inline-block;transition:color .2s}
+.notes-toggle:hover{color:var(--navy)}
 
-  /* HERO */
-  .hero {
-    position: relative; z-index: 1;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 140px 60px 80px;
-    text-align: center;
-    overflow: hidden;
-  }
+/* Summary */
+.summary{background:var(--navy);padding:28px 32px;margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px}
+.sum-item{text-align:center}
+.sum-n{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--gold);line-height:1}
+.sum-l{font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:4px}
 
-  .hero-glow {
-    position: absolute;
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, rgba(26,107,60,0.2) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
+/* Brand section */
+.brand-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.brand-option{background:#fff;border:1.5px solid var(--bl2);padding:16px;cursor:pointer;transition:all .2s;position:relative}
+.brand-option:hover{border-color:var(--navy)}
+.brand-option.selected{border-color:var(--red);background:rgba(192,24,44,.03)}
+.brand-option.selected::after{content:'✓ Seleccionado';position:absolute;top:8px;right:10px;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red)}
+.bo-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:4px}
+.bo-sub{font-size:0.78rem;color:var(--g4);line-height:1.4}
+.bo-tag{display:inline-block;margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--paper);color:var(--g4);padding:2px 8px;border:1px solid var(--bl2)}
 
-  .badge-top {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(26,107,60,0.15);
-    border: 1px solid rgba(26,107,60,0.4);
-    color: #6dcf94;
-    font-size: 12px; font-weight: 600;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 8px 20px; border-radius: 100px;
-    margin-bottom: 40px;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  .badge-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #6dcf94;
-    animation: pulse 2s ease infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.8); }
-  }
-
-  .hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(52px, 7vw, 96px);
-    line-height: 1.0;
-    letter-spacing: -2px;
-    margin-bottom: 12px;
-    animation: fadeUp 0.7s 0.1s ease both;
-  }
-
-  .hero h1 .ia {
-    color: var(--naranja);
-    font-style: italic;
-  }
-
-  .hero-sub {
-    font-size: clamp(16px, 2vw, 22px);
-    color: rgba(255,255,255,0.5);
-    font-weight: 300;
-    letter-spacing: 0.3px;
-    max-width: 600px;
-    margin: 0 auto 60px;
-    line-height: 1.6;
-    animation: fadeUp 0.7s 0.2s ease both;
-  }
-
-  .hero-ctas {
-    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
-    margin-bottom: 80px;
-    animation: fadeUp 0.7s 0.3s ease both;
-  }
-
-  .btn-primary {
-    background: var(--verde);
-    color: var(--white);
-    padding: 16px 36px;
-    border-radius: 8px;
-    font-size: 15px; font-weight: 600;
-    text-decoration: none;
-    border: none; cursor: pointer;
-    transition: all 0.2s;
-    display: inline-flex; align-items: center; gap: 8px;
-  }
-  .btn-primary:hover {
-    background: var(--verde-mid);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(26,107,60,0.4);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: rgba(255,255,255,0.7);
-    padding: 16px 36px;
-    border-radius: 8px;
-    font-size: 15px; font-weight: 500;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-secondary:hover {
-    border-color: rgba(255,255,255,0.4);
-    color: var(--white);
-  }
-
-  /* STATS BAR */
-  .stats-bar {
-    display: flex; gap: 0;
-    border: 1px solid rgba(26,107,60,0.3);
-    border-radius: 12px;
-    overflow: hidden;
-    max-width: 800px; width: 100%;
-    animation: fadeUp 0.7s 0.4s ease both;
-  }
-
-  .stat-item {
-    flex: 1;
-    padding: 24px 20px;
-    text-align: center;
-    border-right: 1px solid rgba(26,107,60,0.2);
-    background: rgba(26,107,60,0.05);
-  }
-  .stat-item:last-child { border-right: none; }
-
-  .stat-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 32px;
-    color: #6dcf94;
-    display: block; margin-bottom: 4px;
-  }
-  .stat-label {
-    font-size: 11px; color: rgba(255,255,255,0.4);
-    letter-spacing: 0.8px; text-transform: uppercase;
-  }
-
-  /* SECTIONS */
-  section {
-    position: relative; z-index: 1;
-    padding: 100px 60px;
-    max-width: 1200px; margin: 0 auto;
-  }
-
-  .section-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; font-weight: 600;
-    color: var(--verde-mid);
-    letter-spacing: 2px; text-transform: uppercase;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(32px, 4vw, 52px);
-    line-height: 1.1;
-    letter-spacing: -1px;
-    margin-bottom: 20px;
-  }
-
-  .section-sub {
-    font-size: 17px;
-    color: rgba(255,255,255,0.5);
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 60px;
-  }
-
-  /* PROBLEM SECTION */
-  .problem-section {
-    background: rgba(212,86,10,0.04);
-    border-top: 1px solid rgba(212,86,10,0.15);
-    border-bottom: 1px solid rgba(212,86,10,0.15);
-    padding: 100px 0;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .problem-inner {
-    max-width: 1200px; margin: 0 auto;
-    padding: 0 60px;
-  }
-
-  .problem-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 60px;
-  }
-
-  .problem-card {
-    background: rgba(212,86,10,0.06);
-    border: 1px solid rgba(212,86,10,0.2);
-    border-radius: 12px;
-    padding: 32px;
-    transition: all 0.3s;
-  }
-  .problem-card:hover {
-    background: rgba(212,86,10,0.1);
-    border-color: rgba(212,86,10,0.4);
-    transform: translateY(-4px);
-  }
-
-  .problem-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 48px;
-    color: rgba(212,86,10,0.3);
-    display: block; margin-bottom: 12px;
-    line-height: 1;
-  }
-
-  .problem-card h3 {
-    font-size: 17px; font-weight: 600;
-    margin-bottom: 10px;
-    color: rgba(255,255,255,0.9);
-  }
-  .problem-card p {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.6;
-  }
-
-  /* SOLUTION — FLOW */
-  .flow-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-top: 60px;
-  }
-
-  .flow-step {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 0;
-    position: relative;
-  }
-
-  .flow-step::after {
-    content: '';
-    position: absolute;
-    left: 39px; top: 60px;
-    width: 2px;
-    height: calc(100% - 20px);
-    background: linear-gradient(to bottom, var(--verde), transparent);
-  }
-  .flow-step:last-child::after { display: none; }
-
-  .step-num {
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    background: var(--verde);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Serif Display', serif;
-    font-size: 18px;
-    margin-top: 8px;
-    position: relative; z-index: 1;
-    flex-shrink: 0;
-  }
-
-  .step-content {
-    padding: 8px 0 48px 32px;
-  }
-
-  .step-actor {
-    font-size: 11px; font-weight: 600;
-    color: var(--verde-mid);
-    letter-spacing: 1.5px; text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .step-content h3 {
-    font-size: 18px; font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .step-content p {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.7;
-    max-width: 560px;
-  }
-
-  /* MODULES */
-  .modules-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-top: 60px;
-  }
-
-  .module-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
-    padding: 36px;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .module-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--verde);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s;
-  }
-  .module-card:hover::before { transform: scaleX(1); }
-  .module-card:hover {
-    background: rgba(26,107,60,0.06);
-    border-color: rgba(26,107,60,0.3);
-    transform: translateY(-4px);
-  }
-
-  .module-icon {
-    font-size: 32px; margin-bottom: 20px;
-    display: block;
-  }
-
-  .module-card h3 {
-    font-size: 18px; font-weight: 600;
-    margin-bottom: 12px;
-  }
-
-  .module-card p {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.7;
-    margin-bottom: 20px;
-  }
-
-  .module-tech {
-    display: flex; flex-wrap: wrap; gap: 6px;
-  }
-
-  .tech-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    background: rgba(26,107,60,0.15);
-    border: 1px solid rgba(26,107,60,0.3);
-    color: #6dcf94;
-    padding: 4px 10px;
-    border-radius: 4px;
-  }
-
-  /* STACK */
-  .stack-section {
-    background: rgba(13,59,110,0.08);
-    border-top: 1px solid rgba(13,59,110,0.3);
-    border-bottom: 1px solid rgba(13,59,110,0.3);
-    padding: 100px 0;
-    width: 100%; max-width: 100%;
-  }
-  .stack-inner { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
-
-  .stack-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 60px;
-  }
-
-  .stack-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px;
-    padding: 28px;
-  }
-
-  .stack-card h4 {
-    font-size: 12px; font-weight: 600;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 1.5px; text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-
-  .stack-items { display: flex; flex-direction: column; gap: 8px; }
-  .stack-item {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .stack-item::before {
-    content: '→';
-    color: var(--verde-mid);
-    font-size: 12px;
-  }
-
-  /* CTA FINAL */
-  .cta-section {
-    text-align: center;
-    padding: 120px 60px;
-    position: relative; z-index: 1;
-    max-width: 100%;
-  }
-
-  .cta-box {
-    max-width: 800px; margin: 0 auto;
-    background: linear-gradient(135deg, rgba(26,107,60,0.15), rgba(13,59,110,0.1));
-    border: 1px solid rgba(26,107,60,0.3);
-    border-radius: 24px;
-    padding: 80px 60px;
-    position: relative; overflow: hidden;
-  }
-
-  .cta-box::before {
-    content: '';
-    position: absolute;
-    top: -100px; right: -100px;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(26,107,60,0.15), transparent 70%);
-  }
-
-  .cta-box h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(28px, 4vw, 48px);
-    letter-spacing: -1px;
-    margin-bottom: 16px;
-  }
-
-  .cta-box p {
-    font-size: 17px;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 40px;
-    line-height: 1.6;
-  }
-
-  /* FOOTER */
-  footer {
-    position: relative; z-index: 1;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    padding: 40px 60px;
-    display: flex; align-items: center; justify-content: space-between;
-    color: rgba(255,255,255,0.3);
-    font-size: 13px;
-  }
-
-  .footer-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    color: rgba(255,255,255,0.5);
-  }
-  .footer-logo span { color: var(--naranja); }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* DIVIDER */
-  .divider {
-    width: 100%; height: 1px;
-    background: linear-gradient(to right, transparent, rgba(26,107,60,0.3), transparent);
-    margin: 0;
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    section { padding: 60px 24px; }
-    .hero { padding: 120px 24px 60px; }
-    .problem-grid, .modules-grid, .stack-grid { grid-template-columns: 1fr; }
-    .stats-bar { flex-direction: column; }
-    .cta-box { padding: 50px 30px; }
-    footer { flex-direction: column; gap: 12px; text-align: center; }
-  }
+@media(max-width:600px){.brand-grid{grid-template-columns:1fr}.item-meta{display:none}}
 </style>
 </head>
 <body>
 
-<div class="grid-bg"></div>
+<header>
+  <div class="h-brand">
+    <span class="h-dnx">DNX</span>
+    <span class="h-title">Diamond Nexus · Checklist de Lanzamiento</span>
+  </div>
+  <div class="h-progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-label" id="progressLabel">0%</span>
+  </div>
+</header>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">Fiscal<span>IA</span></div>
-  <ul class="nav-links">
-    <li><a href="#problema">El Problema</a></li>
-    <li><a href="#solucion">Cómo Funciona</a></li>
-    <li><a href="#modulos">Módulos</a></li>
-    <li><a href="#stack">Tecnología</a></li>
-    <li><a href="#contacto" class="nav-cta">Hablar con el Equipo</a></li>
-  </ul>
-</nav>
+<main>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-glow"></div>
-
-  <div class="badge-top">
-    <span class="badge-dot"></span>
-    GovTech · PropTech · IA aplicada al Estado
+<!-- SECCIÓN 0 — NOMBRE Y MARCA -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">00</div>
+    <div class="section-info">
+      <div class="section-title">Identidad de Marca</div>
+      <div class="section-sub">Decisiones fundacionales — sin esto nada más puede avanzar correctamente</div>
+    </div>
+    <span class="section-badge badge-urgent">🔴 Urgente</span>
   </div>
 
-  <h1>Fiscal<span class="ia">IA</span></h1>
-  <p class="hero-sub">
-    Fiscalización inteligente de subsidios habitacionales.<br>
-    La IA detecta. Los verificadores confirman. El Estado actúa.
-  </p>
-
-  <div class="hero-ctas">
-    <a href="#solucion" class="btn-primary">
-      Ver cómo funciona →
-    </a>
-    <a href="#contacto" class="btn-secondary">Solicitar demo SERVIU</a>
+  <div style="margin-bottom:16px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g4);margin-bottom:10px">Opciones de Nombre — Selecciona la definitiva</div>
+    <div class="brand-grid" id="nameOptions">
+      <div class="brand-option" onclick="selectBrand('name',this,'DNX · Diamond Nexus')">
+        <div class="bo-name" style="color:var(--red)">DNX</div>
+        <div class="bo-sub"><strong>Diamond Nexus</strong><br/>Nombre actual. Sonido global, sigla poderosa. El punto de conexión del diamante.</div>
+        <span class="bo-tag">Recomendado</span>
+      </div>
+      <div class="brand-option" onclick="selectBrand('name',this,'BTP · Baseball Talent Platform')">
+        <div class="bo-name">BTP</div>
+        <div class="bo-sub"><strong>Baseball Talent Platform</strong><br/>Nombre original del deck 2018. Descriptivo pero genérico.</div>
+        <span class="bo-tag">Original 2018</span>
+      </div>
+      <div class="brand-option" onclick="selectBrand('name',this,'LATAM Scout · Global Baseball Intelligence')">
+        <div class="bo-name">LATAM SCOUT</div>
+        <div class="bo-sub"><strong>Global Baseball Intelligence</strong><br/>Enfatiza el origen geográfico y el proceso de scouting.</div>
+        <span class="bo-tag">Alternativa</span>
+      </div>
+      <div class="brand-option" onclick="selectBrand('name',this,'Otro nombre — por definir')">
+        <div class="bo-name" style="color:var(--g4)">OTRO</div>
+        <div class="bo-sub">El equipo tiene otro nombre en mente. Definir en reunión con Henry.</div>
+        <span class="bo-tag">Por definir</span>
+      </div>
+    </div>
   </div>
 
-  <div class="stats-bar">
-    <div class="stat-item">
-      <span class="stat-num">~40K</span>
-      <span class="stat-label">propiedades subsidiadas en riesgo</span>
+  <div class="items">
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Decidir nombre final del proyecto</div>
+        <div class="item-desc">El nombre define el dominio, el logo, los colores y el tono. Es la primera decisión que desbloquea todo lo demás. Propuesta: mantener DNX / Diamond Nexus — tiene fuerza visual, es único y funciona en inglés y español.</div>
+        <span class="item-tag tag-action">Decisión del equipo fundador</span>
+        <div class="notes-area">
+          <span class="notes-toggle" onclick="toggleNote(event,this)">+ Agregar nota</span>
+          <textarea class="notes-input" placeholder="Nota sobre el nombre..."></textarea>
+        </div>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
     </div>
-    <div class="stat-item">
-      <span class="stat-num">$80+</span>
-      <span class="stat-label">costo por inspección tradicional</span>
+
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Comprar dominio — dnxbaseball.com o diamondnexus.com</div>
+        <div class="item-desc">Costo: $12–15 USD/año en GoDaddy, Namecheap o Google Domains. Debe hacerse antes de mostrar el demo a Henry o a Roger. Sin dominio el proyecto no existe formalmente. Verificar disponibilidad: dnxbaseball.com · dnxglobal.com · diamondnexus.com</div>
+        <span class="item-tag tag-action">Acción inmediata — menos de $15</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
     </div>
-    <div class="stat-item">
-      <span class="stat-num">&lt;4h</span>
-      <span class="stat-label">tiempo de verificación en terreno</span>
+
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Definir paleta de colores oficial</div>
+        <div class="item-desc">Propuesta actual basada en el logo existente: Azul navy #0D1B4B (dominante 60%) · Rojo #C0182C (acento 30%) · Blanco #FFFFFF (base 10%). Esta combinación es consistente con las ligas MLB y comunica autoridad deportiva profesional. ¿El equipo la aprueba o quiere explorar alternativas?</div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <div style="width:36px;height:36px;background:#0D1B4B;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="width:36px;height:36px;background:#C0182C;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="width:36px;height:36px;background:#FFFFFF;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="width:36px;height:36px;background:#D4A017;border-radius:3px;border:1px solid #ddd"></div>
+          <div style="margin-left:8px;font-size:0.75rem;color:var(--g4);line-height:1.4;display:flex;align-items:center">Navy · Rojo · Blanco · Oro (acento stats)</div>
+        </div>
+        <span class="item-tag tag-design">Diseño</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
     </div>
-    <div class="stat-item">
-      <span class="stat-num">100%</span>
-      <span class="stat-label">evidencia legalmente trazable</span>
+
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar o actualizar el logo DNX</div>
+        <div class="item-desc">El logo actual (azul navy + rojo, estilo liga deportiva con swoosh) funciona bien para el demo. Si el nombre cambia, el logo debe cambiar. Si DNX se mantiene, el logo actual es sólido y no necesita rediseño urgente — puede refinarse en Fase 1 con un diseñador profesional.</div>
+        <span class="item-tag tag-design">Diseño</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Definir fuente tipográfica oficial</div>
+        <div class="item-desc">Propuesta actual del demo: Bebas Neue (títulos — agresiva, deportiva, gratuita) + Barlow Condensed (etiquetas y datos) + Barlow (cuerpo de texto). Alternativa más premium: Montserrat + Oswald. Las tres opciones son gratuitas en Google Fonts y funcionan en web, app y documentos impresos.</div>
+        <span class="item-tag tag-design">Diseño</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Definir tono de comunicación de la marca</div>
+        <div class="item-desc">Propuesta: Directo · Serio · Con autoridad · Sin exceso de emoción. DNX habla como un scout veterano, no como una startup motivacional. Ejemplo tono correcto: "El próximo firmado ya existe. Nosotros lo encontramos." Ejemplo tono incorrecto: "¡Descubre el talento del mañana hoy!" ¿El equipo está de acuerdo con este enfoque?</div>
+        <span class="item-tag tag-design">Tono de marca</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
     </div>
   </div>
 </div>
 
-<div class="divider"></div>
+<!-- SECCIÓN 1 — DATA REAL -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-info">
+      <div class="section-title">Data Real para el Demo</div>
+      <div class="section-sub">Lo que convierte el demo de ficticio a real — viene de Vilma y Henry</div>
+    </div>
+    <span class="section-badge badge-urgent">🔴 Urgente</span>
+  </div>
+  <div class="items">
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Vilma envía el Excel de jugadores de la escuela</div>
+        <div class="item-desc">Lista con 10–25 jugadores: nombre completo, posición, edad, peso, altura y estadísticas disponibles. Con eso poblamos el directorio DNX con perfiles 100% reales en menos de una tarde. Formato aceptado: Excel, Google Sheets, o incluso WhatsApp en tabla.</div>
+        <span class="item-tag tag-data">Data · Venezuela</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Vilma</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-<!-- PROBLEMA -->
-<div class="problem-section" id="problema">
-  <div class="problem-inner">
-    <span class="section-tag">El Problema</span>
-    <h2 class="section-title">El Estado no puede<br>fiscalizar a escala</h2>
-    <p class="section-sub">Miles de propiedades asignadas con subsidio SERVIU están siendo arrendadas ilegalmente. Nadie lo puede verificar de forma sistemática.</p>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Vilma sube 2–3 videos de entrenamiento por jugador</div>
+        <div class="item-desc">No necesitan ser producción profesional — los videos de celular que ya existen son suficientes para el demo. Subirlos a Google Drive o YouTube (no listado). Eso hace que cada perfil del demo tenga video real, no un placeholder.</div>
+        <span class="item-tag tag-data">Video · Venezuela</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Vilma</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-    <div class="problem-grid">
-      <div class="problem-card reveal">
-        <span class="problem-num">01</span>
-        <h3>Sin capacidad operacional</h3>
-        <p>SERVIU no tiene inspectores suficientes para cubrir las decenas de miles de propiedades subsidiadas a nivel nacional. La fiscalización es puntual y reactiva.</p>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Conseguir al menos 1 caso de éxito documentado</div>
+        <div class="item-desc">Un jugador formado en la escuela que haya firmado con una organización MLB — nombre, equipo, año. Es la prueba de concepto más poderosa del demo. Henry confirmó que hay varios firmados. Necesitamos al menos uno que podamos mencionar con datos reales.</div>
+        <span class="item-tag tag-data">Caso de éxito</span>
       </div>
-      <div class="problem-card reveal">
-        <span class="problem-num">02</span>
-        <h3>Datos desconectados</h3>
-        <p>El Conservador de BB.RR., el SII y los portales de arriendo tienen datos que nunca se cruzan automáticamente. El fraude queda invisible entre los sistemas.</p>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar nombre y ciudad de la escuela formativa de la Fundación</div>
+        <div class="item-desc">Para que aparezca como "Academia Certificada DNX #1" en el demo con el nombre real. Actualmente en el demo aparece como "DNX Academy VEN" — placeholder. ¿Cuál es el nombre oficial de la escuela/academia de la Fundación Roger Cedeño en Venezuela?</div>
+        <span class="item-tag tag-data">Data básica</span>
       </div>
-      <div class="problem-card reveal">
-        <span class="problem-num">03</span>
-        <h3>Evidencia sin validez legal</h3>
-        <p>Las denuncias ciudadanas no tienen formato estructurado ni cadena de custodia. No sirven como prueba en procesos administrativos o judiciales.</p>
+      <div class="item-meta"><div class="item-who">Henry / Vilma</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar datos de contacto reales para el demo</div>
+        <div class="item-desc">WhatsApp del proyecto · Correo electrónico · Instagram o red social. Actualmente el demo muestra: wa.me/1234567890 · info@dnxbaseball.com · @dnxbaseball — todos son placeholders. ¿Cuáles son los reales o cuáles crear antes del demo?</div>
+        <span class="item-tag tag-data">Contacto</span>
       </div>
-      <div class="problem-card reveal">
-        <span class="problem-num">04</span>
-        <h3>Subsidios mal asignados</h3>
-        <p>El Estado invierte millones en subsidios que no cumplen su propósito social. Sin fiscalización efectiva, el problema se perpetúa y escala.</p>
-      </div>
+      <div class="item-meta"><div class="item-who">Henry + Wilson</div><div class="item-phase">Fase 0</div></div>
     </div>
   </div>
 </div>
 
-<div class="divider"></div>
-
-<!-- SOLUCIÓN / FLUJO -->
-<section id="solucion" style="max-width:1200px">
-  <span class="section-tag">Cómo Funciona</span>
-  <h2 class="section-title">De la anomalía al reporte<br>legal en menos de 24 horas</h2>
-  <p class="section-sub">FiscalIA combina detección automática con verificación humana en terreno. La IA trabaja en segundo plano — el analista solo toma decisiones.</p>
-
-  <div class="flow-container">
-    <div class="flow-step reveal">
-      <div class="step-num">1</div>
-      <div class="step-content">
-        <div class="step-actor">Motor de IA</div>
-        <h3>Detección automática de anomalías</h3>
-        <p>El sistema cruza datos del Conservador de BB.RR., SII y portales de arriendo en tiempo real. Cuando una propiedad con subsidio activo aparece publicada en Yapo o Portal Inmobiliario, genera una alerta automática con score de riesgo.</p>
-      </div>
+<!-- SECCIÓN 2 — DEMO TÉCNICO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-info">
+      <div class="section-title">Demo Técnico</div>
+      <div class="section-sub">El sitio web existe — falta publicarlo y poblarlo con data real</div>
     </div>
-    <div class="flow-step reveal">
-      <div class="step-num">2</div>
-      <div class="step-content">
-        <div class="step-actor">Analista SERVIU</div>
-        <h3>Revisión en dashboard institucional</h3>
-        <p>El analista recibe la alerta en su dashboard, revisa el cruce de datos visualizado en mapa, y con un clic decide si escalar a verificación física en terreno.</p>
-      </div>
-    </div>
-    <div class="flow-step reveal">
-      <div class="step-num">3</div>
-      <div class="step-content">
-        <div class="step-actor">Plataforma FiscalIA</div>
-        <h3>Asignación automática de verificador</h3>
-        <p>El sistema busca el verificador disponible más cercano a la propiedad, le asigna la tarea con protocolo detallado paso a paso y lo notifica en segundos.</p>
-      </div>
-    </div>
-    <div class="flow-step reveal">
-      <div class="step-num">4</div>
-      <div class="step-content">
-        <div class="step-actor">Verificador en terreno</div>
-        <h3>Verificación guiada con app móvil</h3>
-        <p>El verificador sigue el protocolo en su teléfono: fotografía fachada, número de casa, buzones y cualquier señal de arriendo. Las fotos se capturan con GPS inmutable y timestamp del servidor — no editables post-captura.</p>
-      </div>
-    </div>
-    <div class="flow-step reveal">
-      <div class="step-num">5</div>
-      <div class="step-content">
-        <div class="step-actor">Claude API</div>
-        <h3>Análisis inteligente de evidencia</h3>
-        <p>La IA analiza las fotos y el informe de campo: detecta señales de arriendo, valida coherencia, genera narrativa en lenguaje legalmente apropiado y estructura toda la evidencia en JSON.</p>
-      </div>
-    </div>
-    <div class="flow-step reveal">
-      <div class="step-num">6</div>
-      <div class="step-content">
-        <div class="step-actor">Sistema FiscalIA</div>
-        <h3>Reporte legal listo para usar</h3>
-        <p>Se genera automáticamente un PDF con cadena de custodia digital, hashes de integridad, firma electrónica y QR verificable. Listo para proceso administrativo de sanción sin trabajo manual adicional.</p>
-      </div>
-    </div>
+    <span class="section-badge badge-pending">🟡 En progreso</span>
   </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- MÓDULOS -->
-<section id="modulos" style="max-width:1200px">
-  <span class="section-tag">Los 4 Módulos del MVP</span>
-  <h2 class="section-title">Una plataforma completa,<br>lista en 12 semanas</h2>
-  <p class="section-sub">Cuatro módulos integrados que cubren el ciclo completo: detección, asignación, verificación y reporte legal.</p>
-
-  <div class="modules-grid">
-    <div class="module-card reveal">
-      <span class="module-icon">📱</span>
-      <h3>App Móvil Verificadores</h3>
-      <p>Protocolo guiado de verificación en terreno. Captura de evidencia con GPS embebido y timestamp inmutable. Funciona offline en zonas sin señal.</p>
-      <div class="module-tech">
-        <span class="tech-tag">React Native</span>
-        <span class="tech-tag">Expo</span>
-        <span class="tech-tag">SQLite offline</span>
-        <span class="tech-tag">Camera API</span>
+  <div class="items">
+    <div class="item info done" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">10 páginas HTML del demo construidas y listas</div>
+        <div class="item-desc">Homepage · Directorio de prospectos · 6 perfiles individuales · Página para scouts · Página de academias. Diseño v3 editorial deportivo aplicado. Fondo blanco con hero oscuro. Listo para subir a GitHub.</div>
+        <span class="item-tag tag-tech">✓ Completado</span>
       </div>
+      <div class="item-meta"><div class="item-who">Claude + Wilson</div><div class="item-phase">✓ Hecho</div></div>
     </div>
-    <div class="module-card reveal">
-      <span class="module-icon">🖥️</span>
-      <h3>Dashboard SERVIU</h3>
-      <p>Mapa de alertas nacional, gestión de casos, métricas ejecutivas y aprobación de reportes. Diseñado para analistas sin conocimientos técnicos.</p>
-      <div class="module-tech">
-        <span class="tech-tag">Next.js 14</span>
-        <span class="tech-tag">Mapbox GL</span>
-        <span class="tech-tag">Recharts</span>
-        <span class="tech-tag">TanStack</span>
-      </div>
-    </div>
-    <div class="module-card reveal">
-      <span class="module-icon">🤖</span>
-      <h3>Motor de Detección IA</h3>
-      <p>Cruce automático de datos CBR, SII y portales de arriendo. Scoring de riesgo por propiedad. Análisis de imágenes con Claude Vision API.</p>
-      <div class="module-tech">
-        <span class="tech-tag">Claude API</span>
-        <span class="tech-tag">Python workers</span>
-        <span class="tech-tag">Scrapy</span>
-        <span class="tech-tag">PostgreSQL</span>
-      </div>
-    </div>
-    <div class="module-card reveal">
-      <span class="module-icon">📄</span>
-      <h3>Generador de Reportes Legales</h3>
-      <p>PDFs firmados digitalmente con cadena de custodia completa. Narrativa generada por IA en lenguaje jurídico. QR verificable para terceros.</p>
-      <div class="module-tech">
-        <span class="tech-tag">Puppeteer</span>
-        <span class="tech-tag">PDF-lib</span>
-        <span class="tech-tag">Claude API</span>
-        <span class="tech-tag">Blockchain hash</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<div class="divider"></div>
+    <div class="item urgent" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Subir el demo a GitHub y publicar con GitHub Pages o Vercel</div>
+        <div class="item-desc">Mismo proceso que el sitio de Soluciones Colina — Claude Code + GitHub + Vercel. En 10 minutos el demo tiene URL pública. Ejemplo resultado esperado: dnx-demo.vercel.app o dnx-baseball.github.io</div>
+        <span class="item-tag tag-tech">Claude Code · GitHub · Vercel</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-<!-- STACK -->
-<div class="stack-section" id="stack">
-  <div class="stack-inner">
-    <span class="section-tag">Stack Tecnológico</span>
-    <h2 class="section-title">100% open source.<br>Costo $0 en fase MVP.</h2>
-    <p class="section-sub">Infraestructura cloud moderna, sin servidor propio hasta 100K verificaciones mensuales.</p>
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Reemplazar perfiles ficticios con jugadores reales</div>
+        <div class="item-desc">Una vez que Vilma envíe el Excel, Claude genera los perfiles reales en HTML y los reemplazamos en el repositorio. Los 6 jugadores ficticios actuales salen, los reales entran. Proceso: 1 hora de trabajo.</div>
+        <span class="item-tag tag-tech">Requiere Excel de Vilma</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson + Claude</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-    <div class="stack-grid">
-      <div class="stack-card reveal">
-        <h4>Frontend Web</h4>
-        <div class="stack-items">
-          <span class="stack-item">Next.js 14 (App Router)</span>
-          <span class="stack-item">TypeScript</span>
-          <span class="stack-item">Tailwind CSS + Shadcn</span>
-          <span class="stack-item">Mapbox GL JS</span>
-        </div>
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Conectar videos reales en los perfiles</div>
+        <div class="item-desc">Una vez que Vilma suba los videos a YouTube o Google Drive, reemplazamos los placeholders de video en cada perfil con los embeds reales. El demo pasa de "video próximamente" a video real del jugador.</div>
+        <span class="item-tag tag-tech">Requiere videos de Vilma</span>
       </div>
-      <div class="stack-card reveal">
-        <h4>App Móvil</h4>
-        <div class="stack-items">
-          <span class="stack-item">React Native 0.74</span>
-          <span class="stack-item">Expo SDK 51</span>
-          <span class="stack-item">Expo Camera + Location</span>
-          <span class="stack-item">SQLite (modo offline)</span>
-        </div>
+      <div class="item-meta"><div class="item-who">Wilson</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Aplicar nombre, logo y colores finales al demo</div>
+        <div class="item-desc">Una vez aprobados nombre, logo y paleta — aplicar al demo completo. Si se mantiene DNX/Diamond Nexus con la paleta actual, el cambio es mínimo. Si cambia el nombre, se actualiza en todos los archivos.</div>
+        <span class="item-tag tag-design">Requiere decisiones de marca</span>
       </div>
-      <div class="stack-card reveal">
-        <h4>Backend API</h4>
-        <div class="stack-items">
-          <span class="stack-item">Node.js 20 + Express</span>
-          <span class="stack-item">Prisma ORM</span>
-          <span class="stack-item">Bull (colas de tareas)</span>
-          <span class="stack-item">Socket.io (real-time)</span>
-        </div>
-      </div>
-      <div class="stack-card reveal">
-        <h4>Base de Datos</h4>
-        <div class="stack-items">
-          <span class="stack-item">PostgreSQL (Supabase)</span>
-          <span class="stack-item">Redis (caché + colas)</span>
-          <span class="stack-item">Backblaze B2 (fotos)</span>
-          <span class="stack-item">Supabase Storage</span>
-        </div>
-      </div>
-      <div class="stack-card reveal">
-        <h4>Inteligencia Artificial</h4>
-        <div class="stack-items">
-          <span class="stack-item">Claude API (Sonnet 4.6)</span>
-          <span class="stack-item">Vision (análisis fotos)</span>
-          <span class="stack-item">NLP (reportes legales)</span>
-          <span class="stack-item">Python + LangChain</span>
-        </div>
-      </div>
-      <div class="stack-card reveal">
-        <h4>Infraestructura</h4>
-        <div class="stack-items">
-          <span class="stack-item">Railway.app (API)</span>
-          <span class="stack-item">Vercel (Next.js)</span>
-          <span class="stack-item">Cloudflare (CDN + WAF)</span>
-          <span class="stack-item">GitHub Actions (CI/CD)</span>
-        </div>
-      </div>
+      <div class="item-meta"><div class="item-who">Wilson + Claude</div><div class="item-phase">Fase 0</div></div>
     </div>
   </div>
 </div>
 
-<div class="divider"></div>
+<!-- SECCIÓN 3 — REUNIÓN HENRY -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-info">
+      <div class="section-title">Reunión con Henry</div>
+      <div class="section-sub">Alineación del equipo fundador antes de cualquier presentación externa</div>
+    </div>
+    <span class="section-badge badge-pending">🟡 Pendiente</span>
+  </div>
+  <div class="items">
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Reunión de alineación del equipo fundador</div>
+        <div class="item-desc">Henry (Florida) · Vilma (Venezuela) · Wilson + Giselle (Chile). Agenda: nombre final, estructura de participación, roles por ubicación, compromisos de cada parte, timeline del demo con data real.</div>
+        <span class="item-tag tag-action">Videollamada · Todos</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
 
-<!-- CTA FINAL -->
-<div class="cta-section" id="contacto">
-  <div class="cta-box">
-    <h2>El Estado necesita<br>fiscalizar inteligente</h2>
-    <p>FiscalIA está lista para un piloto con SERVIU Biobío.<br>50 propiedades, 20 verificadores, resultados reales en 60 días.</p>
-    <div class="hero-ctas" style="justify-content:center; margin-bottom:0">
-      <a href="mailto:contacto@fiscalia.cl" class="btn-primary">Solicitar reunión con SERVIU →</a>
-      <a href="#" class="btn-secondary">Descargar arquitectura técnica</a>
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Confirmar contactos de academias a través de la red de Henry</div>
+        <div class="item-desc">Henry tiene red de contactos en MLB/IMG. ¿Conoce directores o entrenadores de academias en Venezuela o RD que pudieran ser las primeras academias certificadas DNX? Incluso un acuerdo verbal ya eleva el demo.</div>
+        <span class="item-tag tag-data">Red de Henry</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 0</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Preparar propuesta DNX ↔ IMG Academy de 1 página</div>
+        <div class="item-desc">Para que Henry la lleve a la próxima conversación con Roger. Estructura: qué es DNX · qué propone a IMG · el programa piloto de 3–5 becas · el modelo de participación en firmas. Claude la genera lista para imprimir.</div>
+        <span class="item-tag tag-action">Para Roger / IMG</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Wilson + Claude</div><div class="item-phase">Fase 0</div></div>
     </div>
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Fiscal<span>IA</span></div>
-  <div>GovTech · PropTech · Fiscalización Inteligente de Subsidios Habitacionales</div>
-  <div>Chile · 2025</div>
-</footer>
+<!-- SECCIÓN 4 — IMG ACADEMY -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-info">
+      <div class="section-title">Presentación a IMG Academy</div>
+      <div class="section-sub">La oportunidad estratégica más importante del proyecto</div>
+    </div>
+    <span class="section-badge badge-pending">🟡 Pendiente</span>
+  </div>
+  <div class="items">
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Henry muestra el demo a Roger Cedeño</div>
+        <div class="item-desc">Con el demo publicado y la propuesta de 1 página lista, Henry tiene todo lo necesario para la próxima conversación con Roger. Roger ya sabe del proyecto — solo falta mostrarle algo concreto. Este es el momento más crítico de la Fase 0.</div>
+        <span class="item-tag tag-action">Henry → Roger → IMG</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry</div><div class="item-phase">Fase 1</div></div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div class="item-body">
+        <div class="item-title">Proponer programa piloto: 3–5 becas para talentos DNX en IMG</div>
+        <div class="item-desc">El programa piloto es la propuesta concreta — no un acuerdo marco genérico. IMG recibe prospectos venezolanos verificados DNX para sus equipos competitivos. DNX recibe validación institucional. Los jugadores acceden a la mejor academia del mundo.</div>
+        <span class="item-tag tag-action">Piloto concreto</span>
+      </div>
+      <div class="item-meta"><div class="item-who">Henry + Roger</div><div class="item-phase">Fase 1</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="sum-item"><div class="sum-n" id="sumTotal">0</div><div class="sum-l">Total ítems</div></div>
+  <div class="sum-item"><div class="sum-n" id="sumDone" style="color:#3ecf6e">0</div><div class="sum-l">Completados</div></div>
+  <div class="sum-item"><div class="sum-n" id="sumPending" style="color:var(--gold)">0</div><div class="sum-l">Pendientes</div></div>
+  <div class="sum-item"><div class="sum-n" id="sumUrgent" style="color:var(--red)">0</div><div class="sum-l">Urgentes</div></div>
+</div>
+
+</main>
 
 <script>
-  // Intersection Observer para animaciones
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-      }
-    });
-  }, { threshold: 0.1 });
+function toggleItem(el) {
+  if(event.target.classList.contains('notes-toggle') || event.target.classList.contains('notes-input') || event.target.closest('.brand-option')) return;
+  el.classList.toggle('done');
+  updateProgress();
+  saveState();
+}
 
-  reveals.forEach(el => observer.observe(el));
+function toggleNote(e, el) {
+  e.stopPropagation();
+  const input = el.nextElementSibling;
+  const show = input.style.display !== 'block';
+  input.style.display = show ? 'block' : 'none';
+  el.textContent = show ? '− Cerrar nota' : '+ Agregar nota';
+}
 
-  // Nav scroll effect
-  window.addEventListener('scroll', () => {
-    const nav = document.querySelector('nav');
-    if (window.scrollY > 60) {
-      nav.style.boxShadow = '0 4px 40px rgba(0,0,0,0.4)';
-    } else {
-      nav.style.boxShadow = 'none';
-    }
+function selectBrand(type, el, value) {
+  el.closest('#nameOptions').querySelectorAll('.brand-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  saveState();
+}
+
+function updateProgress() {
+  const items = document.querySelectorAll('.item');
+  const done = document.querySelectorAll('.item.done');
+  const urgent = document.querySelectorAll('.item.urgent:not(.done)');
+  const pct = items.length ? Math.round(done.length / items.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '%';
+  document.getElementById('sumTotal').textContent = items.length;
+  document.getElementById('sumDone').textContent = done.length;
+  document.getElementById('sumPending').textContent = items.length - done.length;
+  document.getElementById('sumUrgent').textContent = urgent.length;
+}
+
+function saveState() {
+  const state = {};
+  document.querySelectorAll('.item').forEach((el, i) => {
+    state['item_' + i] = el.classList.contains('done');
+    const note = el.querySelector('.notes-input');
+    if(note) state['note_' + i] = note.value;
   });
+  const sel = document.querySelector('.brand-option.selected');
+  if(sel) state['brand_name'] = sel.querySelector('.bo-name').textContent;
+  try { localStorage.setItem('dnx_checklist', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const state = JSON.parse(localStorage.getItem('dnx_checklist') || '{}');
+    document.querySelectorAll('.item').forEach((el, i) => {
+      if(state['item_' + i]) el.classList.add('done');
+      const note = el.querySelector('.notes-input');
+      if(note && state['note_' + i]) note.value = state['note_' + i];
+    });
+    if(state['brand_name']) {
+      document.querySelectorAll('.brand-option').forEach(opt => {
+        if(opt.querySelector('.bo-name').textContent === state['brand_name']) {
+          opt.classList.add('selected');
+        }
+      });
+    }
+  } catch(e) {}
+}
+
+loadState();
+updateProgress();
 </script>
 
 </body>
